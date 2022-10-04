@@ -1,0 +1,197 @@
+<div id="userbankinfo">
+  <div class="card-body">
+    <table class="table table-bordered table-striped table-hover">
+      <thead>
+      <tr>
+        <th>Account name</th>
+        <th>Account number</th>
+        <th>Select</th>
+        <th>Delete</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr
+        *ngFor="let bankAccount of bankAccounts"
+        [id]="bankAccount.ref_no"
+        [ngStyle]="{'background': bankAccount.active_flag === 'Y' ? 'lightgreen' : '#fff'}"
+      >
+        <td>{{ bankAccount.account_name }}</td>
+        <td>{{ bankAccount.account_number }}</td>
+        <td>
+          <button
+            type="button"
+            [ngClass]="{
+                          'btn': true,
+                          'btn-user-control': true,
+                          'btn-success': bankAccount.active_flag !== 'Y'
+                          }"
+            (click)="selectBankAccount(bankAccount.ref_no)"
+          >
+            {{bankAccount.active_flag === 'Y' ? 'Selected' : 'Select'}}
+          </button>
+        </td>
+        <td>
+          <button
+            type="button"
+            class="btn btn-danger btn-user-control"
+            (click)="removeBankAccount(bankAccount.ref_no)"
+          >
+            Delete
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    class="bankaccount-btns-wrapper displayFlex flexEnd"
+    style="margin: 10px"
+  >
+    <button
+      type="button"
+      class="btn greenBorder"
+      (click)="manualBankAddModel(manualBankAddTemp)"
+    >
+      <div class="displayFlex">
+        <div class="addBank"></div>
+        <div>Add Bank Manually</div>
+      </div>
+    </button>
+  </div>
+</div>
+
+<ng-template #messagebox>
+  <div class="modal-body text-center">
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <p class="headtext">{{message}}</p>
+  </div>
+</ng-template>
+
+<!-- Manual Bank Account Modal -->
+<ng-template #manualBankAddTemp>
+  <div class="modal-body">
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="bankAddFormClose()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h5>Bank Account Information For Auto-Pay</h5>
+
+    <form [formGroup]="bankAddForm" (ngSubmit)="manualBankAdd()">
+      <label for="bankName">Bank Name</label><br />
+      <input
+        type="text"
+        id="bankName"
+        formControlName="bankName"
+        class="form-control"
+        [class.is-invalid]="
+          f.bankName.invalid && (f.bankName.touched || fSubmitted)
+        "
+      />
+      <small
+        *ngIf="f.bankName.invalid && (f.bankName.touched || fSubmitted)"
+        class="text-danger"
+      >Bank name is required</small
+      >
+      <br />
+      <label for="holderName">Primary Account Holder</label><br />
+      <input
+        type="text"
+        id="holderName"
+        formControlName="holderName"
+        class="form-control"
+        [class.is-invalid]="
+          f.holderName.invalid && (f.holderName.touched || fSubmitted)
+        "
+      />
+      <small
+        *ngIf="f.holderName.invalid && (f.holderName.touched || fSubmitted)"
+        class="text-danger"
+      >Account holder name is required</small
+      >
+      <br />
+      <label for="holderName">Routing Number</label><br />
+      <input
+        type="text"
+        id="routingNumber"
+        formControlName="routingNumber"
+        class="form-control"
+        [class.is-invalid]="
+          f.routingNumber.invalid && (f.routingNumber.touched || fSubmitted)
+        "
+      />
+      <div
+        *ngIf="
+          f.routingNumber.invalid && (f.routingNumber.touched || fSubmitted)
+        "
+      >
+        <small *ngIf="f.routingNumber.errors?.required" class="text-danger"
+        >Routing number is required</small
+        >
+        <small *ngIf="f.routingNumber.errors?.min" class="text-danger"
+        >Enter min. of 5 numbers</small
+        >
+      </div>
+      <br />
+      <label for="holderName">Account Number</label><br />
+      <input
+        type="text"
+        id="accountNumber"
+        formControlName="accountNumber"
+        class="form-control"
+        [class.is-invalid]="
+          f.accountNumber.invalid && (f.accountNumber.touched || fSubmitted)
+        "
+      />
+      <div
+        *ngIf="
+          f.accountNumber.invalid && (f.accountNumber.touched || fSubmitted)
+        "
+      >
+        <small *ngIf="f.accountNumber.errors?.required" class="text-danger"
+        >Account number is required</small
+        >
+        <small *ngIf="f.accountNumber.errors?.min" class="text-danger"
+        >Enter min. of 10 numbers</small
+        >
+      </div>
+      <br />
+      <label for="holderName">Account Type</label><br />
+      <select
+        type="text"
+        id="ach_account_type"
+        formControlName="ach_account_type"
+        class="form-control"
+        [class.is-invalid]="f.ach_account_type.invalid && (f.ach_account_type.touched || fSubmitted)"
+      >
+        <option>Saving</option>
+        <option>Checking</option>
+      </select>
+      <div *ngIf="f.ach_account_type.touched || fSubmitted">
+        <small *ngIf="f.ach_account_type.errors?.required" class="text-danger"
+        >Account type is required</small
+        >
+      </div>
+      <br />
+      <button
+        type="button"
+        class="brw-btn closebutton mr30px w200px"
+        (click)="bankAddFormClose()"
+      >
+        CANCEL
+      </button>
+      <button type="submit" class="greenbutton upperCase w200px">Save</button>
+    </form>
+  </div>
+</ng-template>

@@ -1,0 +1,58 @@
+<section class="content-header">
+  <h1>Dashboard</h1>
+</section>
+<section class="dashboard">
+  <!-- <div class="container-fluid"> -->
+  <div class="row pb12">
+    <div class="col-md-4">
+      <div class="media" (click)="goapproved()">
+        <img class="mr-3" src="../../../assets/new/dash_approved.svg">
+        <div class="media-body">
+          <h5 class="mt-0">Approved Applications</h5>
+          <h3>{{ data.approved_application }}</h3>
+        </div>
+      </div>
+    </div>
+<!--    <div class="col-md-4">-->
+<!--      <div class="media" (click)="goPendings()">-->
+<!--        &lt;!&ndash; <div class="fs20px mr30px">Pending Applications</div>-->
+<!--        <div class="noCircle"></div> &ndash;&gt;-->
+<!--        <img class="mr-3" src="../../../assets/new/dash_pending.svg">-->
+<!--        <div class="media-body">-->
+<!--          <h5 class="mt-0">Pending Applications</h5>-->
+<!--          <h3>{{ data.waiting_application }}</h3>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+    <div class="col-md-4">
+      <div class="media" (click)="goincomplete()">
+        <!-- <div class="fs20px mr30px">Incomplete Applications</div>
+        <div class="noCircle">{{ data.incomplete_application }}</div> -->
+        <img class="mr-3" src="../../../assets/new/dash_incomplete.svg">
+        <div class="media-body">
+          <h5 class="mt-0">Incomplete Applications</h5>
+          <h3>{{ data.incomplete_application }}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="media" (click)="godenied()">
+        <!-- <div class="fs20px mr30px">Denied Applications</div>
+        <div class="noCircle">{{ data.canceled_application }}</div> -->
+        <img class="mr-3" src="../../../assets/new/dash_denied.svg">
+        <div class="media-body">
+          <h5 class="mt-0">Denied Applications</h5>
+          <h3>{{ data.canceled_application }}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- </div> -->
+  <!-- <div class="dasboardBox">
+    <div class="fs20px mr30px">Create Application</div>
+  </div> -->
+</section>
+
+

@@ -1,0 +1,1116 @@
+<section class="content-header">
+    <ol class="breadcrumb">
+      <li class="current">
+        <a [routerLink]="['/admin/dashboard']"
+          ><img src="../../assets/new/dashboard.svg"> Dashboard <i class="fal fa-angle-right"></i></a
+        >
+      </li>
+      <li class="current">
+        <a [routerLink]="['/admin/funding-contracts']"
+          ><img src="../../assets/new/file_open.svg"> {{pageTitle}} <i class="fal fa-angle-right"></i></a
+        >
+      </li>
+      <li class="active"><img src="../../assets/new/visibility.svg"> View Application Details</li>
+    </ol>
+        <h1>View Application Details</h1>
+  </section>
+  <div class="content_part">
+  <div class="view_content_part">
+    <div class="mainTitle" style="justify-content: flex-end;">
+      <!-- <div>View Application Details</div> -->
+      <div *ngIf="stage=='waiting'">
+        <button
+          type="button"
+          class="btn btn-danger btn-user-control"
+          (click)="delete()">
+          <i class="fa fa-trash" aria-hidden="true"></i> Delete
+        </button>
+      </div>
+      <div *ngIf="stage=='pending'">
+        <button
+          type="button"
+          class="btn btn-success btn-user-control"
+          (click)="Approve()"
+        >
+          <i class="fa fa-thumbs-up" aria-hidden="true"></i> Approve
+        </button>
+        &nbsp;
+        <button
+          type="button"
+          class="btn btn-danger btn-user-control"
+          (click)="Deny()"
+        >
+          <i class="fa fa-thumbs-down" aria-hidden="true"></i> Deny
+        </button>
+      </div>
+      <div *ngIf="stage=='approved'">
+        <button
+          type="button"
+          class="btn btn-warning btn-user-control"
+          (click)="Pending()"
+        >
+          <i class="fa fa-thumbs-up" aria-hidden="true"></i> Pending
+        </button>
+      </div>
+      <div *ngIf="stage=='fundingcontract'">
+        <button
+          type="button"
+          class="btn btn-success btn-user-control"
+          (click)="funded()"
+        >
+          <i class="fa fa-thumbs-up" aria-hidden="true"></i> Funded
+        </button>
+        &nbsp;
+        <button
+          type="button"
+          class="btn btn-danger btn-user-control"
+          (click)="Deny()"
+        >
+          <i class="fa fa-thumbs-down" aria-hidden="true"></i> Deny
+        </button>
+      </div>
+    </div>
+    <div class="view_content_part_header">
+      <div *ngIf="data.from_details.length">
+        <h4><i class="far fa-chevron-left"></i> {{ data.from_details[0]["firstName"] }} {{ data.from_details[0]["lastName"] }}</h4>
+      </div>
+      <div>
+        <!--<button class="btn main_hover_btn">Start Application</button>-->
+      </div>
+    </div>
+      <div class="pendingTab" *ngIf="viewApp">
+        <tabset>
+          <tab heading="User Information" *ngIf="data.from_details.length > 0 && tabs['User Information']">
+            <!-- <div class="p10px"> -->
+              <!-- <div
+                class="displayFlex AlignItemCenter spaceBetween p10px frameshadow"
+              >
+                <div
+                  class="fs22px displayFlex AlignItemCenter spaceBetween flexDirection mr30px"
+                >
+                  <div class="profilePhoto">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                  </div>
+                  <div class="nowrap">{{ data.from_details[0]["firstName"] }}
+                    {{ data.from_details[0]["lastName"] }}</div>
+                </div>
+              </div> -->
+            <!--            TODO: temporary commented loan info-->
+<!--              <div>-->
+<!--                <form autocomplete="on"  [formGroup]="apForm" (ngSubmit)="sendForm()" class="loan_updates">-->
+<!--                <div class="row">-->
+<!--                  <div class="col-md-4 float-label">-->
+<!--                    <label>Loan Amount</label>-->
+<!--                    <input class="form-control form-application" id="loanAmount" formControlName="LoanAmount"-->
+<!--                    [ngClass]="{ 'is-invalid' :  apForm.controls.LoanAmount.errors && (apForm.controls.LoanAmount.dirty || apForm.controls.LoanAmount.touched || apibtn) }"-->
+<!--                    (input)="findPaymentAmountWithOrigination()">-->
+<!--                    <div *ngIf="apForm.controls.LoanAmount.errors && (apForm.controls.LoanAmount.dirty || apForm.controls.LoanAmount.touched || apibtn)" class="invalid-feedback">-->
+<!--                        <div *ngIf="apForm.controls.LoanAmount.errors.required">-->
+<!--                          Loan Amount is required-->
+<!--                        </div>-->
+<!--                        <div *ngIf="apForm.controls.LoanAmount.errors.pattern">-->
+<!--                          This is not Vaild number-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="col-md-4 float-label">-->
+<!--                    <label>Interest Rate</label>-->
+<!--                    <input class="form-control form-application" id="apr" formControlName="APR"-->
+<!--                    [ngClass]="{ 'is-invalid' :  apForm.controls.APR.errors && (apForm.controls.APR.dirty || apForm.controls.APR.touched || apibtn) }"-->
+<!--                    (input)="findPaymentAmountWithOrigination()">-->
+<!--                    <div *ngIf="apForm.controls.APR.errors && (apForm.controls.APR.dirty || apForm.controls.APR.touched || apibtn)" class="invalid-feedback">-->
+<!--                        <div *ngIf="apForm.controls.APR.errors.required">-->
+<!--                          Interest Rate is required-->
+<!--                        </div>-->
+<!--                        <div *ngIf="apForm.controls.APR.errors.pattern">-->
+<!--                          This is not Vaild number-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="col-md-4 float-label">-->
+<!--                    <label>APR</label>-->
+<!--                    <input class="form-control form-application" id="RealAPR" formControlName="RealAPR" readonly (input)="findPaymentAmountWithOrigination()">-->
+<!--                  </div>-->
+<!--                  <div class="col-md-4 float-label">-->
+<!--                    <label>Duration (Months)</label>-->
+<!--                    <select class="form-control form-application" id="duration" formControlName="Duration"-->
+<!--                    [ngClass]="{ 'is-invalid' :  apForm.controls.Duration.errors && (apForm.controls.Duration.dirty || apForm.controls.Duration.touched || apibtn) }"-->
+<!--                    (change)="findPaymentAmountWithOrigination()">-->
+<!--                      <option *ngFor="let month of durationMonths" [value]="month">{{month}}</option>-->
+<!--                    </select>-->
+<!--                    <div *ngIf="apForm.controls.Duration.errors && (apForm.controls.Duration.dirty || apForm.controls.Duration.touched || apibtn)" class="invalid-feedback">-->
+<!--                      <div *ngIf="apForm.controls.Duration.errors.required">-->
+<!--                        Duration is required-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="col-md-4 float-label">-->
+<!--                    <label>Origination Fee</label>-->
+<!--                    <input class="form-control form-application" id="OriginationFee" formControlName="OriginationFee"-->
+<!--                    [ngClass]="{ 'is-invalid' :  apForm.controls.OriginationFee.errors && (apForm.controls.OriginationFee.dirty || apForm.controls.OriginationFee.touched || apibtn) }"-->
+<!--                    (input)="findPaymentAmountWithOrigination()">-->
+<!--                    <div *ngIf="apForm.controls.OriginationFee.errors && (apForm.controls.OriginationFee.dirty || apForm.controls.OriginationFee.touched || apibtn)" class="invalid-feedback">-->
+<!--                        <div *ngIf="apForm.controls.OriginationFee.errors.pattern">-->
+<!--                          This is not Vaild number-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="col-md-4 float-label">-->
+<!--                    <label>Payment Amount</label>-->
+<!--                    <input class="form-control form-application" id="paymentAmount" formControlName="PaymentAmount">-->
+<!--                  </div>-->
+<!--                  <div class="col-md-8">-->
+<!--                    <button data-toggle="pill" class="btn main_btn mr-2" type="submit" >Save</button>-->
+<!--                    <span *ngIf="stage=='waiting'">-->
+<!--                      <button data-toggle="pill" class="btn main_btn mr-2" id="invite" (click)="inviteUser()" type="button">Invite</button>-->
+<!--                      <button data-toggle="pill" class="btn main_btn mr-2" id="inviteEmailTest" (click)="inviteTest()" type="button">Send Test Email</button>-->
+<!--                    </span>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                </form>-->
+<!--              </div>-->
+                <ul class="userinformation">
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>User Reference</h3></div>
+                      <div class="col-md-7">
+                        <div class="info_value">
+                        <a
+                          routerLink="/admin/users/{{
+                            data.from_details[0]['user_id']
+                          }}"
+                        >
+                          USR_{{ data.from_details[0]["user_ref"] }}
+                        </a>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>Name</h3></div>
+                      <div class="col-md-7">
+                      <div *ngIf="!editName" class="info_value">
+                        {{ data.from_details[0]["firstName"] }}
+                        {{ data.from_details[0]["lastName"] }}
+                        <span (click)="editName=true" class="text-danger cursorpointer">
+                          <!-- <i class="fa fa-edit" aria-hidden="true"></i> -->
+                          <img  src="./../../../assets/new/edit.svg" class="user_edit">
+                        </span>
+                      </div>
+                      <form class="edit_user_info"
+                        *ngIf="editName"
+                        (ngSubmit)="f.form.valid && editUserName()"
+                        #f="ngForm"
+                        novalidate
+                      >
+                        <div class="row">
+                          <div class="col-md-6">
+                          <input type="text" name="firstName" [(ngModel)]="editNameFields['firstName']" class="form-control"
+                                 placeholder="first name" required #firstName="ngModel"
+                                 [class.is-invalid]="f.submitted && firstName.invalid">
+                          </div>
+                          <div class="col-md-6">
+                          <input type="text" name="lastName" [(ngModel)]="editNameFields['lastName']" class="form-control"
+                                 placeholder="last name" required #lastName="ngModel"
+                                 [class.is-invalid]="f.submitted && lastName.invalid">
+                            </div>
+                        </div>
+                        <div class="edit_user_info_btn">
+                        <input type="submit" name="submit" class="upperCase main_btn">
+                        <input type="button" name="cancel" value="cancel" class="upperCase main_hover_btn" (click)="editName=false">
+                        </div>
+                      </form>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>Email Address</h3></div>
+                      <div class="col-md-7">
+                      <div class="info_value">
+                        {{ data.from_details[0]["email"] }}
+                        <i
+                          class="fa fa-bell text-danger cursorpointer"
+                          aria-hidden="true"
+                        ></i>
+                      </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5">
+                        <h3>Phone Number</h3>
+                      </div>
+                      <div class="col-md-7">
+                      <div class="info_value">
+                        {{ data.from_details[0]["phone"] }}
+                        <i
+                          class="fa fa-bell text-danger cursorpointer"
+                          aria-hidden="true"
+                        ></i>
+                      </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>Date of Birth</h3></div>
+                      <div class="col-md-7"><div class="info_value">{{ data.from_details[0]["birthday"] }}</div></div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>Latitude</h3></div>
+                      <div class="col-md-7"><div class="info_value">--</div></div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>Longitude</h3></div>
+                      <div class="col-md-7"><div class="info_value">--</div></div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>Address</h3></div>
+                      <div class="col-md-7">
+                        <div class="info_value" style="height: auto;">
+                        <h4>
+                          {{ data.from_details[0]["streetAddress"] }},
+                          <span class="text-danger cursorpointer" (click)="editStreetAddress=true">
+                          <!-- <i class="fa fa-edit" aria-hidden="true"></i> -->
+                          <img  src="./../../../assets/new/edit.svg" class="user_edit">
+                        </span>
+                        </h4>
+                        <h4>
+                          {{ data.from_details[0]["city"] }}
+                          <span class="text-danger cursorpointer"  (click)="editCity=true">
+                          <!-- <i class="fa fa-edit" aria-hidden="true"></i> -->
+                          <img  src="./../../../assets/new/edit.svg" class="user_edit">
+                        </span>
+                        </h4>
+                        <h4>
+                          {{ data.from_details[0]["zipCode"] }}
+                          <span class="text-danger cursorpointer" (click)="editZipCode=true">
+                          <!-- <i class="fa fa-edit" aria-hidden="true"></i> -->
+                          <img  src="./../../../assets/new/edit.svg" class="user_edit">
+                        </span>
+                        </h4>
+                        </div>
+
+                      </div>
+                    </div>
+                    <div class="row" style="margin-top: 15px;">
+                      <form  class="edit_user_info col-md-4"
+                        *ngIf="editStreetAddress"
+                        (ngSubmit)="f.form.valid && editUserStreetAddress()"
+                        #f="ngForm"
+                        novalidate
+                      >
+                        <div>
+                          <input type="text" name="streetAddress" [(ngModel)]="editStreetFields['streetAddress']" class="form-control"
+                                 placeholder="Street Address" required #streetAddress="ngModel"
+                                 [class.is-invalid]="f.submitted && streetAddress.invalid">
+                            <div class="edit_user_info_btn">
+                          <input type="submit" name="submit" class="upperCase main_btn">
+                          <input type="button" name="cancel" value="cancel" class="upperCase main_hover_btn" (click)="editStreetAddress=false">
+                        </div>
+                        </div>
+                      </form>
+                      <form class="edit_user_info col-md-4"
+                        *ngIf="editCity"
+                        (ngSubmit)="f.form.valid && editUserCity()"
+                        #f="ngForm"
+                        novalidate
+                      >
+                        <div>
+                          <input type="text" name="city" [(ngModel)]="editCityFields['city']" class="form-control"
+                                 placeholder="City" required #city="ngModel"
+                                 [class.is-invalid]="f.submitted && city.invalid">
+                            <div class="edit_user_info_btn">
+                          <input type="submit" name="submit" class="upperCase main_btn">
+                          <input type="button" name="cancel" value="cancel" class="upperCase main_hover_btn" (click)="editCity=false">
+                          </div>
+                        </div>
+                      </form>
+                      <form class="edit_user_info col-md-4"
+                        *ngIf="editZipCode"
+                        (ngSubmit)="f.form.valid && editUserZipCode()"
+                        #f="ngForm"
+                        novalidate
+                      >
+                        <div>
+                          <input type="text" name="zipCode" [(ngModel)]="editZipCodeFields['zipCode']" class="form-control"
+                                 placeholder="ZipCode" required #zipCode="ngModel"
+                                 [class.is-invalid]="f.submitted && zipCode.invalid">
+                            <div class="edit_user_info_btn">
+                          <input type="submit" name="submit" class="upperCase main_btn">
+                          <input type="button" name="cancel" value="cancel" class="upperCase main_hover_btn" (click)="editZipCode=false">
+                        </div>
+                        </div>
+                      </form>
+                      </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>State</h3></div>
+                      <div class="col-md-7"><div class="info_value">{{ data.from_details[0]["state"] }}</div></div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5">
+                        <h3>Financing Exist</h3>
+                      </div>
+                      <div class="col-md-7">
+                        <div class="info_value">Yes
+                        <i
+                          class="fa fa-bell text-success cursorpointer"
+                          aria-hidden="true"
+                        ></i>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>Bank Added</h3></div>
+                      <div class="col-md-7">
+                        <div class="info_value">
+                        <i
+                          class="fa fa-bell text-success cursorpointer"
+                          aria-hidden="true"
+                        ></i>
+                      </div>
+                      </div>
+                    </div>
+                  </li>
+
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>Registered Date</h3></div>
+                      <div class="col-md-7"><div class="info_value">{{ data.from_details[0]["createdAt"] }}</div></div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>Last Profile Update Date</h3></div>
+                      <div class="col-md-7">  <div class="info_value">{{ data.from_details[0]["updatedAt"] }}</div></div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>Annual Income</h3></div>
+                      <div class="col-md-7">
+                      <div class="info_value" *ngIf="data.from_details[0]['annualIncome']">{{ data.from_details[0]["annualIncome"] | currency:'USD':'symbol' }}</div>
+                      <div class="info_value" *ngIf="!data.from_details[0]['annualIncome']">{{ (data.from_details[0]["netMonthlyIncome"]*12) | currency:'USD':'symbol' }}</div>
+                      </div>
+                    </div>
+                  </li>
+
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>Monthly Income</h3></div>
+                      <div class="col-md-7">
+                        <div class="info_value">
+                        {{ data.from_details[0]["netMonthlyIncome"] | currency:'USD':'symbol' }}</div>
+                        </div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>Anticipated Financed Amount</h3></div>
+                      <div class="col-md-7">
+                        <div class="info_value">
+                        {{ data.from_details[0]["loanAmount"] | currency:'USD':'symbol' }}
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="displayNone">
+                    <div class="row">
+                      <div class="col-md-5"><h3>PreDTI Debt</h3></div>
+                      <div class="col-md-7"><div class="info_value">--</div></div>
+                    </div>
+                  </li>
+                  <li class="displayNone">
+                    <div class="row">
+                      <div class="col-md-5"><h3>Funding Tier</h3></div>
+                      <div class="col-md-7"><div class="info_value">--</div></div>
+                    </div>
+                  </li>
+
+                  <li class="displayNone">
+                    <div class="row">
+                      <div class="col-md-5"><h3>PreDTI Debt(%)</h3></div>
+                      <div class="col-md-7"> <div class="info_value">--</div></div>
+                    </div>
+                  </li>
+                  <li class="displayNone">
+                    <div class="row">
+                      <div class="col-md-5"><h3>PreDTI Debt(%)</h3></div>
+                      <div class="col-md-7"><div class="info_value">--</div></div>
+                    </div>
+                  </li>
+                  <li class="displayNone">
+                    <div class="row">
+                      <div class="col-md-5"><h3>Payroll Detected Income</h3></div>
+                      <div class="col-md-7"> <div class="info_value">$0.00</div></div>
+                    </div>
+                  </li>
+                  <li class="displayNone">
+                    <div class="row">
+                      <div class="col-md-5"><h3>Housing Expense</h3></div>
+                      <div class="col-md-7"> <div class="info_value">$0.00</div></div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>Income Type</h3></div>
+                      <div class="col-md-7"> <div class="info_value">Modified by admin</div></div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>Underwriting Rules</h3></div>
+                      <div class="col-md-7"> <div class="info_value">--</div></div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>Application Reference Number</h3></div>
+                      <div class="col-md-7"> <div class="info_value">APP_{{ data.from_details[0]["ref_no"] }}</div></div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>Financing Status</h3></div>
+                      <div class="col-md-7">   <div class="info_value text-success">{{data.stage[0]["status_flag"]}}</div></div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>Denied Reason</h3></div>
+                      <div class="col-md-7"> <div class="info_value text-success">--</div></div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>Counter offered</h3></div>
+                      <div class="col-md-7"><div class="info_value text-success">--</div></div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>Application Created By</h3></div>
+                      <div class="col-md-7"> <div class="info_value text-success">User</div></div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>Plaid Re-sent By</h3></div>
+                      <div class="col-md-7"><div class="info_value text-success">--</div></div>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="row">
+                      <div class="col-md-5"><h3>Offer Link Send By</h3></div>
+                      <div class="col-md-7">  <div class="info_value text-success">--</div></div>
+                    </div>
+                  </li>
+                </ul>
+            <!-- </div> -->
+          </tab>
+
+          <tab heading="Credit Info" *ngIf="data.from_details.length > 0 && tabs['Credit Report']">
+            <div class="p10px">
+              <div class="frameshadow mb20px">
+                <div>
+                  <div class="mainTitle">Credit Report <button class="btn main_btn" type="button" (click) = "creditReportPull()">Pull Credit</button></div>
+                </div>
+                <div class="p10px" >
+                  <div *ngIf="creditReportData">
+                    <embed id="embed" [src]="safeResourceUrl(creditReportData.file)" type="application/pdf" width="100%" style="height: 800px;" >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </tab>
+
+          <tab heading="Payment Schedule" *ngIf="data.from_details.length > 0 && tabs['Payment Schedule'] && data.paymentScheduleDetails.length > 0">
+            <div class="payment_schedule">
+              <accordion >
+                <accordion-group #group (isOpenChange)="paymentAccordinChange($event)">
+                <h2 accordion-heading>Change Payment Schedules <i class="far fa-chevron-down"></i></h2>
+
+
+
+                  <div class="accordion_ans">
+                    <div class="row">
+                      <div class="col-md-3 offset-md-7">
+                        <select
+                        class="form-control Weekly"
+                        name="paymentfrequency"
+                        [formControl]="paymentfrequency"
+                        (change)="payamentSchedules.changePaymentfrequency()"
+                        >
+                        <option [disabled]="!payamentSchedules.calendarOptions.selectable" value="B">Bi-Weekly</option>
+                        <option [disabled]="!payamentSchedules.calendarOptions.selectable" value="M">Monthly</option>
+                        <option [disabled]="!payamentSchedules.calendarOptions.selectable" value="S">Semi-Monthly</option>
+                        <option [disabled]="!payamentSchedules.calendarOptions.selectable" value="W">Weekly</option>
+                        </select>
+                      </div>
+                      <div class="col-md-1">
+                        <button type="button" [disabled]="!payamentSchedules.calendarOptions.selectable" (click)="saveReschedules()" class="btn main_btn">Save</button>
+                      </div>
+                    </div>
+
+                    <full-calendar #calendar id="calendar" [options]="payamentSchedules.calendarOptions"></full-calendar>
+                  </div>
+                </accordion-group>
+                <accordion-group #group>
+                  <h2 accordion-heading>Payment Details <i class="far fa-chevron-down"></i></h2>
+
+                  <div class="accordion_ans">
+                        <h5>Payment</h5>
+                        <div class="dataTables_wrapper">
+                          <table class="table payment">
+                            <tr>
+                              <!-- <div class="displayFlex listdetails"> -->
+                                <td style="font-weight:500;">Financing Start Date</td>
+                                <td>{{ payment[0].createdAt }}</td>
+                              <!-- </div> -->
+                            </tr>
+                            <tr>
+                              <!-- <div class="displayFlex listdetails"> -->
+                                <td style="font-weight:500;">Financing Amount</td>
+                                <td>{{ payment[0].loan_advance | currency }}</td>
+                              <!-- </div> -->
+                            </tr>
+
+                            <tr>
+                              <!-- <div class="displayFlex listdetails"> -->
+                                <td style="font-weight:500;">Payoff Amount</td>
+                                <td>{{ payment[0].payOffAmount | currency }}</td>
+                              <!-- </div> -->
+                            </tr>
+
+                            <tr>
+                              <!-- <div class="displayFlex listdetails"> -->
+                                <td style="font-weight:500;">Interest</td>
+                                <td>{{ payment[0].apr }}%</td>
+                              <!-- </div> -->
+                            </tr>
+
+                            <tr>
+                              <!-- <div class="displayFlex listdetails"> -->
+                                <td style="font-weight:500;">Financing Term</td>
+                                <td>{{payment[0].loantermcount}}</td>
+                              <!-- </div> -->
+                            </tr>
+                            <!--<tr>
+                                <td style="font-weight:500;">Financing Status</td>
+                                <td>{{ payment[0].loantermcount }}</td>
+                            </tr>-->
+                            <tr>
+                              <!-- <div class="displayFlex listdetails"> -->
+                                <td style="font-weight:500;">Maturity Date</td>
+                                <td>{{ payment[0].maturityDate }}</td>
+                              <!-- </div> -->
+                            </tr>
+                            <tr>
+                              <!-- <div class="displayFlex listdetails"> -->
+                                <td style="font-weight:500;">
+                                  Next Payment Schedule Date
+                                </td>
+                                <td>{{ payment[0].nextPaymentSchedule }}</td>
+                              <!-- </div> -->
+                            </tr>
+                          </table>
+                          </div>
+                      <h5>Payment Schedule Information</h5>
+                        <div class="dataTables_wrapper">
+                        <table class="table">
+                          <thead>
+                            <tr>
+                              <th style="width: 10px">#</th>
+                              <th>Unpaid Principal Balance</th>
+                              <th>Principal</th>
+                              <th>Interest</th>
+                              <th>Fees</th>
+                              <th>Amount</th>
+                              <th>Schedule Date</th>
+                              <th>Paid Date</th>
+                            </tr>
+                          </thead>
+                          <tbody *ngIf="data.paymentScheduleDetails.length > 0">
+                            <tr
+                              *ngFor="
+                                let d of data.paymentScheduleDetails;
+                                let i = index
+                              "
+                            >
+                              <td>{{ i + 1 }}</td>
+                              <td>
+                                {{ d.unpaidPrincipal | currency }}
+                              </td>
+                              <td>
+                                {{ d.principal | currency }}
+                              </td>
+                              <td>{{ d.interest | currency }}</td>
+                              <td>{{ d.fees | currency }}</td>
+                              <td>{{ d.amount | currency }}</td>
+                              <td>
+                                {{ datePipe.transform(d.scheduleDate, "yyyy/MM/dd") }}
+                              </td>
+                              <td *ngIf="d.paidAt">
+                                {{ datePipe.transform(d.paidAt, "yyyy/MM/dd") }}
+                              </td>
+                              <td *ngIf="!d.paidAt" class="text-center">
+                                -
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        </div>
+                  </div>
+                </accordion-group>
+              </accordion>
+
+            </div>
+          </tab>
+
+          <tab heading="Bank Accounts" *ngIf="tabs['Bank Accounts']">
+            <app-bank-accounts [loanId]="loanId"></app-bank-accounts>
+          </tab>
+
+          <tab heading="Document Center" *ngIf="data.document && tabs['Document Center']">
+          <div class="document_center">
+            <app-document-center [loanId]="loanId"></app-document-center>
+
+            <accordion>
+              <accordion-group #group>
+                            <h2 accordion-heading>Uploaded Documents <i class="far fa-chevron-down"></i></h2>
+
+
+                      <table class="table table-bordered">
+                        <tr>
+                          <!-- <th style="width: 50px">#</th> -->
+                          <!-- <th>Documents</th>
+                          <th>Document Type</th>
+                          <th>PDF,JPG,JPEG,PNG</th> -->
+                        </tr>
+                        <tbody>
+                          <tr *ngFor="let d of data.userDocument; let i = index">
+                            <!-- <td>{{ i + 1 }}</td> -->
+                            <td>
+                              <div class="media">
+                                <img class="mr-3" src="../../../assets/new/upload_type_img.svg">
+                                <div class="media-body">
+                                  <h5 class="mt-0"> {{ d.type }}</h5>
+                                  <span>{{ d.orginalfileName }}</span>
+                                </div>
+                              </div>
+                            </td>
+                            <!-- <td>{{ d.orginalfileName }}</td> -->
+                            <!-- <td>{{ d.type }}</td> -->
+                            <td><a (click)="view(d.fileName)" href="javascript:void(0)"><img class="view_download" src="../../../assets/new/download.svg"></a></td>
+                          </tr>
+                          <tr class="text-center" *ngIf="!data.userDocument || data.userDocument.length==0">
+                            <td colspan="4">No records</td>
+                          </tr>
+                        </tbody>
+                      </table>
+
+              </accordion-group>
+            </accordion>
+          </div>
+          <div class="content_footer">
+            <button class="btn main_hover_btn" (click)="modelopen(upload_document)">Uploaded Documents</button>
+          </div>
+
+          </tab>
+
+          <tab heading="Comments" *ngIf="data.from_details.length > 0 && tabs['Comments']">
+                <!-- <div class="frameshadow">
+                  <form name="form" (ngSubmit)="f.form.valid && addcomments(messagebox)" #f="ngForm" novalidate>
+                  <div class=" ">
+                    <div
+                      class="displayFlex listdetails AlignItemCenter flexStart"
+                    >
+                      <div class="fontWeight w200px">Subject</div>
+                      <div class="w100per">
+                        <input type="text" name="subject" [(ngModel)]="cm.subject" #subject="ngModel" required class="form-control" [ngClass]="{ 'is-invalid': f.submitted && subject.invalid }"/>
+                      </div>
+                    </div>
+                    <div
+                      class="displayFlex listdetails AlignItemCenter flexStart"
+                    >
+                      <div class="fontWeight w200px">Comments</div>
+                      <div class="w100per">
+                        <textarea class="form-control" name="comments" [(ngModel)]="cm.comments" #comments="ngModel" required [ngClass]="{ 'is-invalid': f.submitted && subject.invalid }"></textarea>
+                      </div>
+                    </div>
+                    <div class="p10px">
+                      <button
+                        type="submit"
+                        class="btn btn-primary"
+                        id="updocs"
+                        value="Validate"
+                      >
+                        Submit
+                      </button>
+                    </div>
+                  </div>
+                </form>
+                </div> -->
+
+              <div class="Comments_sec">
+                  <h5>Comments</h5>
+                  <div class="dataTables_wrapper">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th style="width: 10px">#</th>
+                        <th>Subject</th>
+                        <th>Comments</th>
+                        <th>Created By</th>
+                        <th>Created Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="
+                      let c of resComments;
+                      let i = index
+                    "
+
+                    >
+                        <td>{{i+1}}</td>
+                        <td>{{c.subject}}</td>
+                        <td>{{c.comments}}</td>
+                        <td>{{c.role}}:{{c.firstName}} {{c.lastName}}</td>
+                        <td>{{c.createdAt}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  </div>
+
+              </div>
+              <div class="content_footer">
+                <button class="btn main_hover_btn"   (click)="modelopen(comment_modal)"
+                >Add Comment</button>
+              </div>
+          </tab>
+
+          <tab heading="Log" *ngIf="data.from_details.length > 0 && tabs['Log']">
+            <div class="log_sec">
+                    <h5>Log Activity Details</h5>
+                    <div class="dataTables_wrapper">
+                    <table id="achlogactivity_table" class="table dataTable">
+                      <thead>
+                        <tr>
+                          <th style="width: 10px">#</th>
+                          <th>Log Reference</th>
+                          <th>Module Name</th>
+                          <th>User</th>
+                          <th>Created Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let d of screenlogs; let i= index;">
+                          <td>{{i+1}}</td>
+                          <td>{{d.id}}</td>
+                          <td>{{d.module}}</td>
+                          <td>
+                           {{d.user}}
+                          </td>
+                          <td >{{d.createdat}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    </div>
+            </div>
+          </tab>
+        </tabset>
+      </div>
+  </div>
+  </div>
+
+  <ng-template #messagebox>
+    <div class="modal-body text-center">
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="close()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <p class="headtext">Message</p>
+      <p *ngFor="let m of message">{{ m }}</p>
+    </div>
+  </ng-template>
+
+  <!-- Manual Bank Account Modal -->
+  <ng-template #manualBankAddTemp>
+    <div class="modal-body manualBankAddTemp">
+      <button
+        type="button"
+        class="close pull-right"
+        aria-label="Close"
+        (click)="bankAddFormClose()"
+      >
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h5>Bank Account Information For Auto-Pay</h5>
+
+      <form [formGroup]="bankAddForm" (ngSubmit)="manualBankAdd()">
+        <div class="row">
+          <div class="col-md-6">
+            <label for="bankName">Bank Name</label><br />
+            <input
+              type="text"
+              id="bankName"
+              formControlName="bankName"
+              class="form-control"
+              [class.is-invalid]="f.bankName.invalid && (f.bankName.touched || fSubmitted)"
+            />
+            <small *ngIf="f.bankName.invalid && (f.bankName.touched || fSubmitted)" class="text-danger">Bank name is required</small>
+          </div>
+          <div class="col-md-6">
+            <label for="holderName">Primary Account Holder</label><br />
+            <input
+              type="text"
+              id="holderName"
+              formControlName="holderName"
+              class="form-control"
+              [class.is-invalid]="f.holderName.invalid && (f.holderName.touched || fSubmitted)"
+            />
+            <small *ngIf="f.holderName.invalid && (f.holderName.touched || fSubmitted)" class="text-danger">Account holder name is required</small>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <label for="holderName">Routing Number</label><br />
+            <input
+              type="number"
+              id="routingNumber"
+              formControlName="routingNumber"
+              class="form-control"
+              [class.is-invalid]="f.routingNumber.invalid && (f.routingNumber.touched || fSubmitted)"
+            />
+            <div *ngIf="f.routingNumber.invalid && (f.routingNumber.touched || fSubmitted)">
+              <small *ngIf="f.routingNumber.errors?.required" class="text-danger">Routing number is required</small>
+              <small *ngIf="f.routingNumber.errors?.min" class="text-danger">Enter min. of 5 numbers</small>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label for="holderName">Account Number</label><br />
+            <input
+              type="number"
+              id="accountNumber"
+              formControlName="accountNumber"
+              class="form-control"
+              [class.is-invalid]="f.accountNumber.invalid && (f.accountNumber.touched || fSubmitted)"
+            />
+            <div *ngIf="f.accountNumber.invalid && (f.accountNumber.touched || fSubmitted)">
+              <small *ngIf="f.accountNumber.errors?.required" class="text-danger">Account number is required</small>
+              <small *ngIf="f.accountNumber.errors?.min" class="text-danger">Enter min. of 10 numbers</small>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+              <label for="holderName">Confirm Account Number</label><br />
+              <input
+                type="number"
+                id="confmAccountNumber"
+                formControlName="confmAccountNumber"
+                class="form-control"
+                [class.is-invalid]="f.confmAccountNumber.invalid && (f.confmAccountNumber.touched || fSubmitted)"
+              />
+              <div *ngIf="(f.confmAccountNumber.touched || fSubmitted)">
+                <small *ngIf="f.confmAccountNumber.errors?.required" class="text-danger">Confirm account number is required</small>
+                <small *ngIf="bankAddForm.errors?.misMatch" class="text-danger">Account number not matched</small>
+              </div>
+            </div>
+        </div>
+        <div class="manualBankAddTemp_btn">
+        <button type="button" class="btn main_hover_btn mr30px" (click)="bankAddFormClose()">CANCEL</button>
+        <button type="submit" class="btn main_btn">Save</button>
+        </div>
+      </form>
+      <!-- <form
+        id="manualBankAddForm"
+        name="manualBankAddForm"
+        (ngSubmit)="f.form.valid && manualBankAdd()"
+        #f="ngForm"
+        novalidate
+      >
+        <label>Bank Name</label><br />
+        <input
+          type="text"
+          name="bankName"
+          [(ngModel)]="manualBankAddFields.bankName"
+          class="form-control"
+          required #bankName="ngModel"
+          [class.is-invalid]="(bankName.touched || f.submitted) && bankName.invalid"
+        /><br />
+        <label>Primary Account Holder</label><br />
+        <input
+          type="text"
+          name="holderName"
+          [(ngModel)]="manualBankAddFields.holderName"
+          class="form-control"
+          required #holderName="ngModel"
+          [class.is-invalid]="(holderName.touched || f.submitted) && holderName.invalid"
+        /><br />
+        <label>Routing Number</label><br />
+        <input
+          type="number"
+          name="routingNumber"
+          [(ngModel)]="manualBankAddFields.routingNumber"
+          class="form-control"
+          required pattern="^\d{5}$"
+          #routingNumber="ngModel" [class.is-invalid]="(routingNumber.touched || f.submitted) && routingNumber.invalid"
+        /><br />
+        <label>Account Number</label><br />
+        <input
+          type="number"
+          name="accountNumber"
+          [(ngModel)]="manualBankAddFields.accountNumber"
+          class="form-control"
+          required pattern="^\d{12}$"
+          #accountNumber="ngModel" [class.is-invalid]="(accountNumber.touched || f.submitted) && accountNumber.invalid"
+        /><br />
+        <label>Confirm Account Number</label><br />
+        <input
+          type="number"
+          name="confmAccountNumber"
+          [(ngModel)]="manualBankAddFields.confmAccountNumber"
+          class="form-control"
+          required pattern="^\d{12}$"
+          #confmAccountNumber="ngModel" [class.is-invalid]="((confmAccountNumber.touched || f.submitted) && confmAccountNumber.invalid) || (accountNumber.value!==confmAccountNumber.value)"
+        /><br />
+        <button type="button" class="brw-btn closebutton mr30px w200px" (click)="close()">CANCEL</button>
+        <button type="submit" class="greenbutton upperCase w200px">Save</button>
+      </form> -->
+    </div>
+  </ng-template>
+
+
+
+
+  <!-- comment popup Modal -->
+<ng-template #comment_modal>
+  <form name="form" (ngSubmit)="f.form.valid && addcomments(messagebox)" #f="ngForm" novalidate>
+  <div class="commemt_box modal-body">
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h5>Add Comment</h5>
+
+          <div class="row">
+            <div class="col-md-4">
+            <label>Subject</label>
+            </div>
+            <div class="col-md-8">
+              <input type="text" name="subject" placeholder="Title" [(ngModel)]="cm['subject']" #subject="ngModel" required class="form-control" [ngClass]="{ 'is-invalid': f.submitted && subject.invalid }"/>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+            <label>Comments</label>
+            </div>
+            <div class="col-md-8">
+              <textarea class="form-control" placeholder="Comment" name="comments" [(ngModel)]="cm['comments']" #comments="ngModel" required [ngClass]="{ 'is-invalid': f.submitted && subject.invalid }"></textarea>
+            </div>
+          </div>
+        </div>
+          <div class="modal-footer">
+            <div style="float:right;">
+              <button type="button" class="btn main_hover_btn" (click)="close()" style="margin-right: 20px;">CANCEL</button>
+              <button type="submit"  id="updocs" value="Validate" class="btn main_btn">Add Comment</button>
+            </div>
+          </div>
+        </form>
+</ng-template>
+
+
+
+<!-- document upload -->
+
+<ng-template #upload_document>
+
+  <div class="commemt_box modal-body">
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h5>Upload Documents</h5>
+
+
+  <div class="row">
+  <div class="col-md-6"><label>Document Type</label></div>
+  <div class="col-md-6">
+    <select name="docutype" [formControl]="formControls.type" class="form-control">
+      <option value="">Select Document Type</option>
+      <option *ngFor="let doc of documentsTypes" [value]="doc.documentType">{{doc.documentType}}</option>
+    </select>
+    <div *ngIf="!formControls.type.valid && formControls.type.errors && (formControls.type.dirty ||
+    formControls.type.touched)" class="text-danger">
+      <div *ngIf="formControls.type.errors.required">
+        Document Type is required.
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+<div class="col-md-6"><label>Document</label></div>
+  <div class="col-md-6">
+    <ngx-file-drag-drop class="upload_docs"
+      [formControl]="formControls.docFile"
+      activeBorderColor="#3F51B5"
+      accept="image/png, image/jpeg, application/pdf"
+    >
+    </ngx-file-drag-drop>
+    <div *ngIf="!formControls.docFile.valid && formControls.docFile.errors && (formControls.docFile.dirty ||
+    formControls.docFile.touched)" class="text-danger">
+      <div *ngIf="formControls.docFile.errors.required">
+        File is required.
+      </div>
+      <div *ngIf="formControls.docFile.errors['fileExtension']">
+        Unsupported file format.
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn main_hover_btn" (click)="close()" style="margin-right: 20px;">CANCEL</button>
+
+  <button
+    type="button"
+    class="btn main_btn"
+    id="updocs2"
+    (click)="uploadDoc()"
+  >
+    Upload
+  </button>
+</div>
+
+
+
+</ng-template>

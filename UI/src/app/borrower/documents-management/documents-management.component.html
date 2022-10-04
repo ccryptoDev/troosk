@@ -1,0 +1,147 @@
+<section class="documents_management">
+<div class="body_content">
+  <h5 class="body_content_header">Documents Management</h5>
+  <div class="displayFlex AlignItemCenter spaceBetween mb50px">
+    <div class="grayButton cursor displayFlex AlignItemCenter justifycontencenter">
+      <div class="folders cursorpointer"></div>
+      <div>
+        <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)"
+          (onFileLeave)="fileLeave($event)">
+          <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+            <span (click)="openFileSelector()" class="cursorpointer">Upload new files</span>
+          </ng-template>
+        </ngx-file-drop>
+      </div>
+    </div>
+    <!-- <div class="grayButton">Uploaded</div>
+    <div class="grayButton">Consents</div>
+    <div class="grayButton">Contracts signed</div> -->
+  </div>
+
+
+  <div *ngIf="listfiles.length>0">
+    <div class="grayBoxcolor displayFlex AlignItemCenter spaceBetween mb20px" *ngFor="let file of fileitems;let i = index">
+      <div class="displayFlex AlignItemCenter">
+        <div class="greenfolder"></div>
+        <div>{{file.name.split('.')[0]}}</div>
+      </div>
+
+      <div class="extenType">{{file.name.split('.')[1] | uppercase }}</div>
+      <div>{{(file.size / 1024).toFixed(2)}} KB</div>
+      <div>{{today}}</div>
+      <div>
+        <select class="form-control"
+            (change)="selectDocType(i, $event)"
+        >
+            <option value="">Select Document Type</option>
+            <option value="Government Issued ID">
+                Government Issued ID
+            </option>
+            <option value="Paystub">Paystub</option>
+            <option value="Income Document">Income Document</option>
+            <option value="Driver License">Driver License</option>
+            <option value="Bank Statement">Bank Statement</option>
+            <option value="Proof of Ownership">Proof of Ownership</option>
+            <option value="Others">Others</option>
+        </select>
+        <input
+            hidden
+            (keyup)="docTypeComment(i, $event.target['value'])"
+        />
+      </div>
+    </div>
+
+    <div class="p-3 mt-3 text-center">
+      <button type="button" class="btn btn-sales" (click)="completed()">Upload</button>
+    </div>
+  </div>
+
+
+
+            <div class="frameshadow mb20px">
+              <div>
+                <div class="mainTitle">Financing Agreement Documents</div>
+              </div>
+              <div class="p10px">
+                <table class="table table-bordered">
+                  <tr>
+                    <th style="width: 50px">#</th>
+                    <th>Documents</th>
+                    <!-- <th>Document Type</th> -->
+                    <th>PDF</th>
+                  </tr>
+                  <tbody>
+                    <tr *ngFor="let doc of data.userConsentDoc; let i = index">
+                      <td>{{ i + 1 }}</td>
+                      <td>{{ doc['fileName'] }}</td>
+                      <td (click)="downloadDocumentPdf(doc['fileData'])" class="cursorpointer">
+                        <a>View Document</a>
+                      </td>
+                    </tr>
+                    <!-- <tr>
+                      <td>{{ data.userConsentDoc.length + 1 }}</td>
+                      <td>Promissory note</td>
+                      <td (click)="downloadpdf()" class="cursorpointer">
+                        <a>View Document</a>
+                      </td>
+                    </tr> -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="mb20px">
+              <div class="frameshadow">
+                <div>
+                  <div class="mainTitle">Upload Documents</div>
+                </div>
+
+
+
+
+
+
+                <div class="p10px">
+                  <table class="table table-bordered">
+                    <tr>
+                      <th style="width: 50px">#</th>
+                      <th>Documents</th>
+                      <th>Document Type</th>
+                      <th>PDF,JPG,JPEG,PNG</th>
+                    </tr>
+                    <tbody>
+                      <tr *ngFor="let d of data.files; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ d.originalname }}</td>
+                        <td>{{ d.documentType }}</td>
+                        <td (click)="view(d.filename)" class="cursorpointer"><a>View Document</a></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+
+
+
+              </div>
+            </div>
+
+
+</div>
+
+<ng-template #messagebox>
+  <div class="modal-body text-center">
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <p class="headtext">Message</p>
+    <p *ngFor="let m of message">{{ m }}</p>
+  </div>
+</ng-template>
+
+</section>

@@ -1,0 +1,216 @@
+<div class="m50px">
+  <div class="fs22px pb20 textAlignCenter">Seetings</div>
+
+  <div class="grayBox">
+    <div class="fs22px pb20">Account</div>
+    <div class=" ">Avatar</div>
+    <div class="displayFlex AlignItemCenter">
+      <div class="profileIcon marginInherit">
+        <img src="../../../assets/profile_photo.jpg" />
+      </div>
+      <div class="p10px">
+        <button type="button" class="uploadButton mb10px">Upload</button> <br />
+        <button type="button" class="removeButton">Remove</button>
+      </div>
+    </div>
+    <div class="ptop15">
+      <form
+        name="form"
+        (ngSubmit)="f.form.valid && onSubmit()"
+        #f="ngForm"
+        novalidate
+      >
+        <div class="form-group">
+          <label for="ContactName">First Name</label>
+          <input
+            type="text"
+            name="firstName"
+            class="form-control"
+            placeholder="Enter First Name"
+            (input)="f1.firstName = namedata($event)"
+            [(ngModel)]="f1.firstName"
+            #firstName="ngModel"
+            required
+            [ngClass]="{ 'is-invalid': f.submitted && firstName.invalid }"
+          />
+        </div>
+        <div class="form-group">
+          <label for="ContactName">Last name</label>
+          <input
+            type="text"
+            name="lastName"
+            class="form-control"
+            placeholder="Enter Last name"
+            (input)="f1.lastName = namedata($event)"
+            [(ngModel)]="f1.lastName"
+            #lastName="ngModel"
+            required
+            [ngClass]="{ 'is-invalid': f.submitted && lastName.invalid }"
+          />
+        </div>
+        <div class="form-group">
+          <label for="ContactName">Social Security Number </label>
+          <input
+            type="text"
+            name="socialSecurityNumber"
+            placeholder="000-00-0000"
+            class="form-control"
+            [hiddenInput]="true"
+            mask="XXX-XX-0000"
+            [(ngModel)]="f1.socialSecurityNumber"
+            #socialSecurityNumber="ngModel"
+            required
+            [ngClass]="{
+              'is-invalid': f.submitted && socialSecurityNumber.invalid
+            }"
+          />
+        </div>
+        <div class="form-group">
+          <label for="ContactName">Date of Birthday</label>
+          <!-- <input type="text"  class="form-control"  (input)="f1.Date_of_Birthday = namedata($event)"  [(ngModel)]="f1.Date_of_Birthday" #Date_of_Birthday="ngModel" required [ngClass]="{ 'is-invalid': f.submitted && Date_of_Birthday.invalid }"> -->
+          <input
+            name="birthday"
+            placeholder="mm/dd/yyyy"
+            [(ngModel)]="f1.birthday"
+            #birthday="bsDatepicker"
+            [maxDate]="maxDate"
+            class="form-control"
+            bsDatepicker
+            [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }"
+            required
+            [ngClass]="{ 'is-invalid': f.submitted && !f1.birthday }"
+          />
+        </div>
+        <div class="form-group">
+          <label for="ContactEmail">Email</label>
+          <input
+            type="email"
+            name="email"
+            class="form-control"
+            placeholder="Enter Email"
+            [(ngModel)]="f1.email"
+            #email="ngModel"
+            required
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+            [ngClass]="{ 'is-invalid': f.submitted && email.invalid }"
+          />
+        </div>
+        <div class="form-group">
+          <label for="ContactName">Phone</label>
+          <input
+            type="text"
+            name="phone"
+            class="form-control"
+            placeholder="Enter Phone"
+            placeholder="+1 (000) 000-0000"
+            mask="+0 (000) 000-0000"
+            (input)="f1.phone = $event.target.value"
+            [(ngModel)]="f1.Phone"
+            #phone="ngModel"
+            required
+            [ngClass]="{ 'is-invalid': f.submitted && phone.invalid }"
+          />
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group">
+              <label for="ContactName">Installation Street Address</label>
+              <input
+                type="text"
+                name="streetAddress"
+                class="form-control"
+                placeholder="Enter Installation Street Address"
+                [(ngModel)]="f1.streetAddress"
+                #streetAddress="ngModel"
+                required
+                [ngClass]="{
+                  'is-invalid': f.submitted && streetAddress.invalid
+                }"
+              />
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label for="ContactName">Unit</label>
+              <input
+                type="text"
+                name="unit"
+                class="form-control"
+                placeholder="Enter Unit"
+                [(ngModel)]="f1.unit"
+                #unit="ngModel"
+                required
+                [ngClass]="{ 'is-invalid': f.submitted && unit.invalid }"
+              />
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="form-group">
+              <label for="ContactName">City</label>
+              <input
+                type="text"
+                name="city"
+                class="form-control"
+                placeholder="Enter City"
+                [(ngModel)]="f1.city"
+                #city="ngModel"
+                required
+                [ngClass]="{ 'is-invalid': f.submitted && city.invalid }"
+              />
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="form-group">
+              <label for="ContactName">State</label>
+              <input
+                type="text"
+                name="state"
+                class="form-control"
+                placeholder="Enter State"
+                [(ngModel)]="f1.state"
+                #state="ngModel"
+                required
+                [ngClass]="{ 'is-invalid': f.submitted && state.invalid }"
+              />
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="form-group">
+              <label for="ContactName">Zip Code</label>
+              <input
+                type="text"
+                name="zipCode"
+                class="form-control"
+                placeholder="Enter Zip Code"
+                (input)="f1.zipCode = number($event)"
+                [(ngModel)]="f1.zipCode"
+                #zipCode="ngModel"
+                required
+                [ngClass]="{ 'is-invalid': f.submitted && zipCode.invalid }"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="ContactName">Individual Annual Income ($)</label>
+          <input
+            type="text"
+            name="annualIncome"
+            class="form-control"
+            placeholder="Enter Individual Annual Income"
+            (input)="f1.annualIncome = number($event)"
+            (blur)="f1.annualIncome = transformAmount($event)"
+            [(ngModel)]="f1.annualIncome"
+            #annualIncome="ngModel"
+            required
+            [ngClass]="{ 'is-invalid': f.submitted && annualIncome.invalid }"
+          />
+        </div>
+        <div class="form-group mt-5">
+          <button type="submit" class="greenbutton">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

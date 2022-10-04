@@ -1,0 +1,442 @@
+<!-- Navigation-->
+<!-- <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav"> -->
+<div class="AdminSidemenu" id="AdminSidemenu">
+
+
+  <div (click)="switchsidenavtoggled()" class="sidenavToggler">
+    <div id="sidenavToggler " class="cursorpointer">
+      <i class="far fa-chevron-left"></i>
+    </div>
+  </div>
+
+
+    <a class="admin_logo" [routerLink]="['/admin/dashboard']">
+    <img src="../../assets/new/troosk_logo.png" />
+  </a>
+
+
+  <!-- <button
+    class="navbar-toggler navbar-toggler-right"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarResponsive"
+    aria-controls="navbarResponsive"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <img src="../../assets/new/responsive_toggle.svg">
+  </button> -->
+
+
+   <!-- <div data-toggle="tooltip" data-placement="right" title="Start Applications" class="mb_34 fullsidebar"
+        [routerLink]="['/admin/start-application']" *ngIf="pages['Start Application']">
+        <button class="btn main_btn w100per" [routerLinkActive]="['active']">
+          <span class="nav-link-text">Start Applications</span>
+        </button>
+      </div> -->
+
+        <!-- small sidebar menu  start-->
+<!--
+    <div data-toggle="tooltip" data-placement="right" title="Start Applications" class="mb_34 smallsidebar" [routerLink]="['/admin/start-application']" *ngIf="pages['Start Application']">
+        <button class="startapplication_btn" [routerLinkActive]="['active']">
+        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+
+
+        </button>
+    </div> -->
+
+    <!-- small sidebar menu end -->
+
+  <!-- <div class="collapse navbar-collapse" id="navbarResponsive"> -->
+    <ul
+      class="navbar-nav navbar-sidenav sidenav-overflow"
+      id="exampleAccordion"
+    >
+
+      <li
+        data-toggle="tooltip"
+        data-placement="right"
+        title="Dashboard"
+        [routerLink]="['/admin/dashboard']"
+        *ngIf="pages['Dashboard']"
+      >
+        <a  [routerLinkActive]="['active']">
+          <img class="sidebar_icon" src="../../assets/new/dashboard.svg">
+          <span class="nav-link-text">Dashboard</span>
+        </a>
+      </li>
+
+      <li
+        data-toggle="tooltip"
+        data-placement="right"
+        title="Incomplete Applications"
+        [routerLink]="['/admin/loan-stages/waiting']"
+        *ngIf="pages['Incomplete Application']"
+      >
+        <a  [routerLinkActive]="['active']">
+          <img class="sidebar_icon" src="../../assets/new/incomplete.svg">
+          <span class="nav-link-text">Incomplete Applications</span>
+        </a>
+      </li>
+
+      <!-- <li
+      class="nav-item"
+      data-toggle="tooltip"
+      data-placement="right"
+      title="Underwriting Applications"
+      [routerLink]="['/admin/underwriting']"
+      *ngIf="pages['Pending Application']"
+    >
+      <a class="nav-link" [routerLinkActive]="['active']">
+        <i class="far fa-hourglass"></i>
+        <span class="nav-link-text">Underwriting Applications</span>
+      </a>
+    </li> -->
+<!--      <li-->
+<!--        data-toggle="tooltip"-->
+<!--        data-placement="right"-->
+<!--        title="Pending Applications"-->
+<!--        [routerLink]="['/admin/loan-stages/pending']"-->
+<!--        *ngIf="pages['Pending Application']"-->
+<!--      >-->
+<!--        <a  [routerLinkActive]="['active']">-->
+<!--          <img class="sidebar_icon" src="../../assets/new/pending.svg">-->
+<!--          <span class="nav-link-text">Pending Applications</span>-->
+<!--        </a>-->
+<!--      </li>-->
+
+      <li
+        data-toggle="tooltip"
+        data-placement="right"
+        title="Approved Applications"
+        [routerLink]="['/admin/loan-stages/approved']"
+        *ngIf="pages['Approved Application']"
+      >
+        <a  [routerLinkActive]="['active']">
+          <img class="sidebar_icon" src="../../assets/new/approved.svg">
+          <span class="nav-link-text">Approved Applications</span>
+        </a>
+      </li>
+
+      <li
+        data-toggle="tooltip"
+        data-placement="right"
+        title="Funding Contracts"
+        [routerLink]="['/admin/loan-stages/fundingcontract']"
+        *ngIf="pages['Funding Contracts']"
+      >
+        <a  [routerLinkActive]="['active']">
+          <i class="fa fa-fw fa-folder sidebar_icon"></i>
+          <!-- <img src="../../assets/new/funted_contract.png"> -->
+          <span class="nav-link-text">Funding Contracts</span>
+        </a>
+      </li>
+      <li
+        data-toggle="tooltip"
+        data-placement="right"
+        title="Performing Contracts"
+        [routerLink]="['/admin/loan-stages/performingcontract']"
+      >
+        <a  [routerLinkActive]="['active']">
+          <img class="sidebar_icon" src="../../assets/new/performing.svg">
+          <span class="nav-link-text">Performing Contracts</span>
+        </a>
+      </li>
+      <li
+        data-toggle="tooltip"
+        data-placement="right"
+        title="Archived Open Applications"
+        *ngIf="pages['Archived Open Applications']"
+      >
+        <a >
+          <img class="sidebar_icon" src="../../assets/new/archived.svg">
+          <span class="nav-link-text">Archived Contracts</span>
+        </a>
+      </li>
+
+      <li
+        data-toggle="tooltip"
+        data-placement="right"
+        title="Denied Applications"
+        [routerLink]="['/admin/denied']"
+        *ngIf="pages['Denied Application']"
+      >
+        <a  [routerLinkActive]="['active']">
+          <img class="sidebar_icon" src="../../assets/new/denied.svg">
+          <span class="nav-link-text">Denied Applications</span>
+        </a>
+      </li>
+      <li>
+        <hr />
+      </li>
+      <li
+        data-toggle="tooltip"
+        data-placement="right"
+        title="Components"
+        *ngIf="pages['Settings']"
+      >
+        <a
+          class="nav-link-collapse collapsed"
+          [routerLinkActive]="['active']"
+          (click)="switchSettings()"
+          [class.collapsed]="!Settings"
+          data-toggle="collapse"
+          data-parent="#exampleAccordion"
+        >
+          <i class="fa fa-fw fa-th sidebar_icon"></i>
+          <span class="nav-link-text">Settings</span>
+          <i class="fa fa-angle-down ml_auto" aria-hidden="true"></i>
+
+        </a>
+      </li>
+      <ul
+        class="sidenav-second-level collapse"
+        [class.show]="Settings"
+        id="collapseComponents"
+      >
+        <li
+          [routerLink]="['/admin/settings/auditlog']"
+          *ngIf="tabs['Audit Log']"
+        >
+          <a>
+            <i class="fal fa-file-search sidebar_icon"></i>
+            <span class="nav-link-text">Audit Log</span></a
+          >
+        </li>
+        <!-- <li class="nav-item">
+        <a class="nav-link">
+          <i class="fa fa-fw fa-user"></i>
+          <span class="nav-link-text">Admin Manage Users</span></a
+        >
+      </li> -->
+        <!-- <li
+          class="nav-item"
+          [routerLink]="['/admin/settings/questions']"
+          *ngIf="tabs['Questions']"
+        >
+          <a class="nav-link" [routerLinkActive]="['active']">
+            <i class="fal fa-question-square"></i>
+            <span class="nav-link-text">Questions</span></a
+          >
+        </li> -->
+        <li
+          [routerLink]="['/admin/settings/admin-security']"
+          *ngIf="tabs['Admin Security']"
+        >
+          <a  [routerLinkActive]="['active']">
+            <i class="fal fa-key sidebar_icon"></i>
+            <span class="nav-link-text">Admin Security</span></a
+          >
+        </li>
+        <li
+          [routerLink]="['/admin/settings/roles']"
+          *ngIf="tabs['Roles']"
+        >
+          <a  [routerLinkActive]="['active']">
+            <i class="fal fa-user-tag sidebar_icon"></i>
+            <span class="nav-link-text">Roles</span></a
+          >
+        </li>
+      </ul>
+      <li  [routerLink]="['/admin/login-log']">
+        <a  [routerLinkActive]="['active']">
+          <i class="fal fa-user-circle sidebar_icon"></i>
+          <span class="nav-link-text"> Login Log</span>
+        </a>
+      </li>
+      <!-- <li class="nav-item" data-toggle="tooltip" data-placement="right" title="All Patients">
+            <a class="nav-link" >
+              <i class="fa fa-fw fa-folder"></i>
+              <span class="nav-link-text">All Patients</span>
+            </a>
+          </li> -->
+      <!-- <li
+        class="nav-item"
+        data-toggle="tooltip"
+        data-placement="right"
+        title="Practice Management"
+        *ngIf="pages['Installer Management']"
+      >
+        <a class="nav-link">
+          <i class="fa fa-fw fa-folder"></i>
+          <span class="nav-link-text">Installer management</span>
+        </a>
+      </li> -->
+      <li  [routerLink]="['/admin/users']">
+        <a
+          [routerLinkActive]="['active']"
+          *ngIf="pages['Users']"
+        >
+        <img class="sidebar_icon" src="../../assets/new/all_customer.svg">
+          <span class="nav-link-text sidebar_icon"> all customers</span>
+        </a>
+      </li>
+      <!-- <li
+        class="nav-item"
+        data-toggle="tooltip"
+        data-placement="right"
+        title="Create Application"
+      >
+        <a class="nav-link">
+          <i class="fa fa-fw fa-folder"></i>
+          <span class="nav-link-text">Create Application</span>
+        </a>
+      </li> -->
+    </ul>
+    <!-- <ul class="navbar-nav sidenav-toggler" (click)="switchsidenavtoggled()">
+      <li class="nav-item">
+        <a class="nav-link text-center" id="sidenavToggler">
+          <i class="fa fa-fw fa-angle-left"></i>
+        </a>
+      </li>
+    </ul> -->
+    <ul class="navbar-nav ml-auto">
+      <!-- <li
+        class="nav-item dropdown"
+        [class.show]="Messages"
+        (click)="switchmessages()"
+      >
+        <a
+          class="nav-link dropdown-toggle mr-lg-2"
+          id="messagesDropdown"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <i class="fa fa-fw fa-envelope"></i>
+          <span class="d-lg-none"
+            >Messages
+            <span class="badge badge-pill badge-primary">12 New</span>
+          </span>
+          <span class="indicator text-primary d-none d-lg-block">
+            <i class="fa fa-fw fa-circle"></i>
+          </span>
+        </a>
+        <div
+          class="dropdown-menu"
+          [class.show]="Messages"
+          aria-labelledby="messagesDropdown"
+        >
+          <h6 class="dropdown-header">New Messages:</h6>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item">
+            <strong>David Miller</strong>
+            <span class="small float-right text-muted">11:21 AM</span>
+            <div class="dropdown-message small">
+              Hey there! This new version of SB Admin is pretty awesome! These
+              messages clip off when they reach the end of the box so they don't
+              overflow over to the sides!
+            </div>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item">
+            <strong>Jane Smith</strong>
+            <span class="small float-right text-muted">11:21 AM</span>
+            <div class="dropdown-message small">
+              I was wondering if you could meet for an appointment at 3:00
+              instead of 4:00. Thanks!
+            </div>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item">
+            <strong>John Doe</strong>
+            <span class="small float-right text-muted">11:21 AM</span>
+            <div class="dropdown-message small">
+              I've sent the final files over to you for review. When you're able
+              to sign off of them let me know and we can discuss distribution.
+            </div>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item small">View all messages</a>
+        </div>
+      </li> -->
+      <!-- <li
+        class="nav-item dropdown"
+        [class.show]="Alert"
+        (click)="switchalert()"
+      >
+        <a
+          class="nav-link dropdown-toggle mr-lg-2"
+          id="alertsDropdown"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <i class="fa fa-fw fa-bell"></i>
+          <span class="d-lg-none"
+            >Alerts
+            <span class="badge badge-pill badge-warning">6 New</span>
+          </span>
+          <span class="indicator text-warning d-none d-lg-block">
+            <i class="fa fa-fw fa-circle"></i>
+          </span>
+        </a>
+        <div
+          class="dropdown-menu"
+          [class.show]="Alert"
+          aria-labelledby="alertsDropdown"
+        >
+          <h6 class="dropdown-header">New Alerts:</h6>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item">
+            <span class="text-success">
+              <strong>
+                <i class="fa fa-long-arrow-up fa-fw"></i>Status Update</strong
+              >
+            </span>
+            <span class="small float-right text-muted">11:21 AM</span>
+            <div class="dropdown-message small">
+              This is an automated server response message. All systems are
+              online.
+            </div>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item">
+            <span class="text-danger">
+              <strong>
+                <i class="fa fa-long-arrow-down fa-fw"></i>Status Update</strong
+              >
+            </span>
+            <span class="small float-right text-muted">11:21 AM</span>
+            <div class="dropdown-message small">
+              This is an automated server response message. All systems are
+              online.
+            </div>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item">
+            <span class="text-success">
+              <strong>
+                <i class="fa fa-long-arrow-up fa-fw"></i>Status Update</strong
+              >
+            </span>
+            <span class="small float-right text-muted">11:21 AM</span>
+            <div class="dropdown-message small">
+              This is an automated server response message. All systems are
+              online.
+            </div>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item small">View all alerts</a>
+        </div>
+      </li> -->
+      <!-- <li class="nav-item">
+        <form class="form-inline my-2 my-lg-0 mr-lg-2">
+          <div class="input-group">
+            <input
+              class="form-control"
+              type="text"
+              placeholder="Search for..."
+            />
+            <span class="input-group-append">
+              <button class="btn btn-primary" type="button">
+                <i class="fa fa-search"></i>
+              </button>
+            </span>
+          </div>
+        </form>
+      </li> -->
+    </ul>
+  <!-- </div> -->
+<!-- </nav> -->
+</div>

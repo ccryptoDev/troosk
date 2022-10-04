@@ -1,0 +1,135 @@
+<section class="body_content">
+  <!-- <div class="fs22px pb20">Overview</div> -->
+  <div class="overview media">
+    <img class="mr-3" src="assets/new/profile.svg" alt="Generic placeholder image">
+    <div class="media-body">
+      <h5 class="mt-0">Your Profile</h5>
+
+      <div class="profile_table">
+    <table class="table">
+      <tr>
+        <th>Name :</th>
+        <td>{{data.customerInfo.name}}</td>
+      </tr>
+      <tr>
+        <th>Phone</th>
+        <td>{{data.customerInfo.mobilePhone}}</td>
+      </tr>
+
+      <tr>
+        <th>Email</th>
+        <td>{{data.customerInfo.email}}</td>
+      </tr>
+
+      <tr>
+        <th>Address</th>
+        <td>{{data.customerInfo.address}}</td>
+      </tr>
+      <tr>
+        <th>Loan Amount</th>
+        <td>${{data.loanDetails.amountFinanced}}</td>
+      </tr>
+      <tr>
+        <th>Loan Term</th>
+        <td>{{data.loanDetails.numberOfPayments}} months</td>
+      </tr>
+      <tr>
+        <th>Loan Interest</th>
+        <td>{{data.loanDetails.apr}} %</td>
+      </tr>
+      <tr>
+        <th>Credit Expiration Date</th>
+        <td>{{data.amortizationSchedule[data.amortizationSchedule.length - 1].paymentDueDate}}</td>
+      </tr>
+      <tr>
+        <th>Monthly Payment</th>
+        <td>${{data.loanDetails.amountOfEachPayment}}</td>
+      </tr>
+    </table>
+  </div>
+
+      <div class="overviewloanblock">
+        <div class="profile_table">
+          <div>
+            <div class="fs16px fontWeight pb20">Ending balance</div>
+            <div class="fs22px greenColor pb20">${{data.amortizationSchedule[0].endingBalance}}</div>
+          </div>
+
+          <div class="displayFlex spaceBetween pb20">
+            <div>Minimum amount</div>
+            <div>${{data.amortizationSchedule[0].scheduledPayment}}</div>
+          </div>
+          <div class="displayFlex spaceBetween pb20">
+            <div>Next payment due</div>
+            <div>{{datePipe.transform(data.amortizationSchedule[0].paymentDueDate,"MMMM dd yyyy")}}</div>
+          </div>
+          <div *ngIf="data.user_details[0]?.autoPayment=='Y'" class="infoBlock mb20px">
+            <div class="info_icon"></div>
+            <div>
+              You have automatic payment set up and this payment will be
+              automatically deducated from your bank account due to date.
+            </div>
+          </div>
+
+    <!--      <br>-->
+    <!--      <div *ngIf="data.payment_details.length">-->
+    <!--      <div class="fs16px fontWeight pb20">Previous Payments</div>-->
+    <!--      <div *ngFor="let pd of data.payment_details" class="displayFlex spaceBetween pb20">-->
+    <!--        <div class="displayFlex">-->
+    <!--          <div class="tick_icon"></div>-->
+    <!--          <div>{{datePipe.transform(pd.paidAt,"MMMM dd")}}th {{datePipe.transform(pd.paidAt,"yyyy")}}</div>-->
+    <!--        </div>-->
+    <!--        <div>${{pd.amount}}</div>-->
+    <!--      </div>-->
+    <!--    </div>-->
+
+
+    <!--        <button-->
+    <!--          class="btn main_btn"-->
+    <!--          (click)="router.navigate(['borrower/make-payment']);"-->
+    <!--        >-->
+    <!--          Make a payment-->
+    <!--          <i class="fal fa-angle-right"></i>-->
+    <!--        </button>-->
+
+
+    <!--    </div>-->
+    <!--    &lt;!&ndash; <div class="grayBox w48per">-->
+    <!--      <div class="overviewloanblock mh448">-->
+    <!--        <div>-->
+    <!--          <div class="fs16px fontWeight pb20">To-Do-List</div>-->
+    <!--          <div class="displayFlex AlignItemCenter pb20">-->
+    <!--            <input type="checkbox" class="mr30px" />-->
+    <!--            <div class=" ">Upload a recent mortgage statement</div>-->
+    <!--          </div>-->
+    <!--          <div class="displayFlex AlignItemCenter pb20">-->
+    <!--            <input type="checkbox" class="mr30px" />-->
+    <!--            <div class=" ">Upload proof of income</div>-->
+    <!--          </div>-->
+    <!--          <div class="displayFlex AlignItemCenter pb20">-->
+    <!--            <input type="checkbox" class="mr30px" />-->
+    <!--            <div class=" ">Verify your email address</div>-->
+    <!--          </div>-->
+    <!--          <div class="displayFlex AlignItemCenter pb20">-->
+    <!--            <input type="checkbox" class="mr30px" />-->
+    <!--            <div class=" ">Sign the loan agreement</div>-->
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--        <div>-->
+    <!--          <div-->
+    <!--            class="displayFlex greenbutton AlignItemCenter spaceBetween width75per"-->
+    <!--            (click)="router.navigate(['borrower/todo-list']);"-->
+    <!--          >-->
+    <!--            <div>Review to-dos</div>-->
+    <!--            <div class="arrow_icon"></div>-->
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div> &ndash;&gt;-->
+    <!--  </div>-->
+
+    </div>
+      </div>
+    </div>
+  </div>
+</section>

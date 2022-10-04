@@ -1,0 +1,65 @@
+<div class="sidebar1 p20">
+  <div class="mt50px">
+    <form class="form-inline">
+      <input
+        class="form-control"
+        type="search"
+        placeholder="Search by id, name etc."
+        aria-label="Search"
+      />
+    </form>
+  </div>
+  <div class="leftmenulist text-center mt50px">
+    <div
+      [routerLinkActive]="['lightGreen']"
+      [routerLink]="['/installer/main']"
+      class="mb20px"
+    >
+      <a class="btn"
+        ><i-bs
+          [routerLinkActive]="['textgreen']"
+          name="grid-fill"
+          class="text-installer1"
+        ></i-bs
+        ><br />Main</a
+      >
+    </div>
+    <div
+      [routerLinkActive]="['lightGreen']"
+      [routerLink]="['/installer/customers']"
+      class="mb20px"
+    >
+      <a class="btn"
+        ><i-bs
+          [routerLinkActive]="['textgreen']"
+          name="card-text"
+          class="text-installer1"
+        ></i-bs
+        ><br />Customers</a
+      >
+    </div>
+    <div
+      [routerLinkActive]="['lightGreen']"
+      [routerLink]="['/installer/profile']"
+      class="mb20px"
+    >
+      <a class="btn"
+        ><i-bs
+          [routerLinkActive]="['textgreen']"
+          name="person"
+          class="text-installer1"
+        ></i-bs
+        ><br />Profile</a
+      >
+    </div>
+    <!-- <div
+     
+      class="mb20px"
+    >
+      <a class="btn"
+        >
+        <i class="fa fa-sign-out"  class="text-installer1"></i><br />Logout</a
+      >
+    </div> -->
+  </div>
+</div>

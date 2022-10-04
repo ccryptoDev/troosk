@@ -1,0 +1,263 @@
+<div class="body_content">
+  <h5 class="body_content_header">Payment Method</h5>
+
+  <div class="content_box">
+    <div>
+      <div class="fs16px fontWeight pb20">Select Payment Method</div>
+    </div>
+
+    <div class="displayFlex spaceBetween">
+      <div class="fontWeight">Bank Account</div>
+      <div class="greenColor cursorpointer" (click)="manualBankAddModel(manualBankAddTemp)">
+        Add bank account <i class="fa fa-plus-circle" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div class="bank_icon"></div>
+
+    <div *ngFor="let bank of data.bankDetails">
+      <div class="displayFlex spaceBetween pb20">
+        <div>{{bank['account_name']}} (******{{bank['account_number']}})</div>
+        <div class="greenColor cursorpointer" (click)="selectBankAccount(bank['ref_no'])">
+          Change
+        </div>
+      </div>
+      <div *ngIf="bank.active_flag=='Y'" class="fontWeight pb20 activeTxtColor">Active</div>
+    </div>
+
+  </div>
+
+<!--  <div class="content_box">-->
+<!--    <div class="displayFlex spaceBetween">-->
+<!--      <div class="fontWeight">Debit Card</div>-->
+<!--      <div class="greenColor cursorpointer" (click)="addNewCard(addNewCardTemp)">-->
+<!--        Add Debit Card <i class="fa fa-plus-circle" aria-hidden="true"></i>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="withbank_icon"></div>-->
+
+<!--    <div *ngFor="let c of data.cardDetails">-->
+<!--      <div class="displayFlex spaceBetween pb20">-->
+<!--        <div>-->
+<!--          {{c.fullName}} (******{{c.cardNumber.substring(c.cardNumber.length-4)}}) <br />-->
+<!--          Expiration date {{c.expires}}-->
+<!--        </div>-->
+<!--        <div class="greenColor cursorpointer" (click)="changeCard(changeCardTemp)">-->
+<!--          change-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div *ngIf="c.active_flag=='Y'" class="fontWeight pb20 activeTxtColor">Active</div>-->
+<!--    </div>-->
+
+<!--    <div class="infoBlock mb20px">-->
+<!--      <div class="info_icon"></div>-->
+<!--      <div>-->
+<!--        You can use your debit card in order to make single payments outside of-->
+<!--        your scheduled payments-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+  <div class="content_box">
+    <div class="displayFlex spaceBetween">
+      <div class="fontWeight">Automatic Payment</div>
+    </div>
+    <div class="autopayment"></div>
+    <div class="displayFlex spaceBetween pb20">
+      <div>Set up automatic payment</div>
+      <div class=" " style="display: grid;">
+        <div class="switch">
+          <input type="checkbox" id="autoPay" [checked]="data.user_details?.autoPayment=='Y'" #autoPay
+            (change)="toggleAutoPay(autoPay.checked)" />
+          <label for="autoPay"></label>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #changeCardTemp>
+  <div class="modal-body">
+    <h5 class="pb20">Choose your active debit card</h5>
+    <form id="cardChooseForm" name="cardChooseForm" (ngSubmit)="f.form.valid && cardChoose()" #f="ngForm" novalidate>
+      <div *ngFor="let c of data.cardDetails" class="displayFlex AlignItemCenter spaceBetween pb20">
+        <div>{{c.fullName}} (******{{c.cardNumber.substring(c.cardNumber.length-4)}})</div>
+        <input type="radio" name="chooseCrd" checked="checked" value="{{c.id}}" [(ngModel)]="activeCard" />
+      </div>
+      <div class="mtb10">
+        <button type="button" class="btn main_hover_btn mr30px" (click)="close()">Close</button><button type="submit"
+          class="btn main_btn">Apply</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #manualBankAddTemp>
+  <div class="modal-body">
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="bankAddFormClose()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h5>Bank Account Information For Auto-Pay</h5>
+
+    <form [formGroup]="bankAddForm" (ngSubmit)="manualBankAdd()">
+      <label for="bankName">Bank Name</label><br />
+      <input
+        type="text"
+        id="bankName"
+        formControlName="bankName"
+        class="form-control"
+        [class.is-invalid]="
+          f.bankName.invalid && (f.bankName.touched || fSubmitted)
+        "
+      />
+      <small
+        *ngIf="f.bankName.invalid && (f.bankName.touched || fSubmitted)"
+        class="text-danger"
+      >Bank name is required</small
+      >
+      <br />
+      <label for="holderName">Primary Account Holder</label><br />
+      <input
+        type="text"
+        id="holderName"
+        formControlName="holderName"
+        class="form-control"
+        [class.is-invalid]="
+          f.holderName.invalid && (f.holderName.touched || fSubmitted)
+        "
+      />
+      <small
+        *ngIf="f.holderName.invalid && (f.holderName.touched || fSubmitted)"
+        class="text-danger"
+      >Account holder name is required</small
+      >
+      <br />
+      <label for="holderName">Routing Number</label><br />
+      <input
+        type="text"
+        id="routingNumber"
+        formControlName="routingNumber"
+        class="form-control"
+        [class.is-invalid]="
+          f.routingNumber.invalid && (f.routingNumber.touched || fSubmitted)
+        "
+      />
+      <div
+        *ngIf="
+          f.routingNumber.invalid && (f.routingNumber.touched || fSubmitted)
+        "
+      >
+        <small *ngIf="f.routingNumber.errors?.required" class="text-danger"
+        >Routing number is required</small
+        >
+        <small *ngIf="f.routingNumber.errors?.min" class="text-danger"
+        >Enter min. of 5 numbers</small
+        >
+      </div>
+      <br />
+      <label for="holderName">Account Number</label><br />
+      <input
+        type="text"
+        id="accountNumber"
+        formControlName="accountNumber"
+        class="form-control"
+        [class.is-invalid]="
+          f.accountNumber.invalid && (f.accountNumber.touched || fSubmitted)
+        "
+      />
+      <div
+        *ngIf="
+          f.accountNumber.invalid && (f.accountNumber.touched || fSubmitted)
+        "
+      >
+        <small *ngIf="f.accountNumber.errors?.required" class="text-danger"
+        >Account number is required</small
+        >
+        <small *ngIf="f.accountNumber.errors?.min" class="text-danger"
+        >Enter min. of 10 numbers</small
+        >
+      </div>
+      <br />
+      <label for="holderName">Account Type</label><br />
+      <select
+        type="text"
+        id="ach_account_type"
+        formControlName="ach_account_type"
+        class="form-control"
+        [class.is-invalid]="f.ach_account_type.invalid && (f.ach_account_type.touched || fSubmitted)"
+      >
+        <option>Saving</option>
+        <option>Checking</option>
+      </select>
+      <div *ngIf="f.ach_account_type.touched || fSubmitted">
+        <small *ngIf="f.ach_account_type.errors?.required" class="text-danger"
+        >Account type is required</small
+        >
+      </div>
+      <br />
+      <button
+        type="button"
+        class="brw-btn closebutton mr30px w200px"
+        (click)="bankAddFormClose()"
+      >
+        CANCEL
+      </button>
+      <button type="submit" class="greenbutton upperCase w200px">Save</button>
+    </form>
+  </div>
+</ng-template>
+
+<!--<ng-template #addNewCardTemp>-->
+<!--  <div class="modal-body">-->
+<!--    <h5 class="pb20">Add new debit card</h5>-->
+
+<!--    <form id="debitCardAddForm" name="debitCardAddForm" (ngSubmit)="f.form.valid && debitCardAdd()" #f="ngForm"-->
+<!--          novalidate>-->
+<!--      <label>Full Name </label><br />-->
+<!--      <input type="text" name="fullName" placeholder="Enter full name" class="form-control inputField mb10px"-->
+<!--             [(ngModel)]="debitCardAddFields.fullName" required #fullName="ngModel"-->
+<!--             [class.is-invalid]="(fullName.touched || f.submitted) && fullName.invalid" />-->
+<!--      <label>Card Number</label>-->
+<!--      <input type="text" name="cardNumber" mask="0000-0000-0000-0000" placeholder="Enter card Number" class="form-control inputField mb10px"-->
+<!--             [(ngModel)]="debitCardAddFields.cardNumber" required #cardNumber="ngModel"-->
+<!--             [class.is-invalid]="(cardNumber.touched || f.submitted) && cardNumber.invalid" />-->
+
+<!--      <div class="displayFlex spaceBetween">-->
+<!--        <div class="w48per">-->
+<!--          <label>Expires </label>-->
+<!--          <input type="text" name="expires" placeholder="MM/YY" mask="00/00" class="form-control inputField mb10px"-->
+<!--                 [(ngModel)]="debitCardAddFields.expires" required #expires="ngModel"-->
+<!--                 [class.is-invalid]="(expires.touched || f.submitted) && expires.invalid" />-->
+<!--        </div>-->
+<!--        <div class="w48per">-->
+<!--          <label>CSC</label>-->
+<!--          <input type="text" name="csc" mask="000" placeholder="Enter 3 digits" class="form-control inputField mb10px"-->
+<!--                 [(ngModel)]="debitCardAddFields.csc" required #csc="ngModel"-->
+<!--                 [class.is-invalid]="(csc.touched || f.submitted) && csc.invalid" />-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <label>Billing address</label>-->
+<!--      <input type="text" name="billingAddress" placeholder="Enter billing address"-->
+<!--             class="form-control inputField mb10px" [(ngModel)]="debitCardAddFields.billingAddress" required-->
+<!--             #billingAddress="ngModel"-->
+<!--             [class.is-invalid]="(billingAddress.touched || f.submitted) && billingAddress.invalid" />-->
+<!--      <div class="displayFlex AlignItemCenter">-->
+<!--        <input type="checkbox" name="agree" class="mr30px" [(ngModel)]="debitCardAddFields.agree" required />-->
+<!--        <div class=" ">I agree to the Terms and Conditions</div>-->
+<!--      </div>-->
+
+<!--      <div class="displayFlex AlignItemCenter">-->
+<!--        <input type="checkbox" name="confirm" class="mr30px" [(ngModel)]="debitCardAddFields.confirm" required />-->
+<!--        <div class=" ">I confirm the bank account details above</div>-->
+<!--      </div>-->
+<!--      <div class="mtb10">-->
+<!--        <button type="button" class="btn main_hover_btn mr30px" (click)="close()">Close</button>-->
+<!--        <button type="submit" class="btn main_btn">Add</button>-->
+<!--      </div>-->
+<!--    </form>-->
+<!--  </div>-->
+<!--</ng-template>-->

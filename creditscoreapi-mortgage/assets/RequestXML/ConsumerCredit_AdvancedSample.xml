@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This document showcases all fields that can be used with this product's orders. Use this as a reference document -->
+<MESSAGE xmlns="http://www.mismo.org/residential/2009/schemas" xmlns:p2="http://www.w3.org/1999/xlink" xmlns:p3="inetapi/MISMO3_4_MCL_Extension.xsd" MessageType="Request">
+    <ABOUT_VERSIONS>
+        <ABOUT_VERSION>
+            <DataVersionIdentifier>201703</DataVersionIdentifier>
+        </ABOUT_VERSION>
+    </ABOUT_VERSIONS>
+    <DEAL_SETS>
+        <DEAL_SET>
+            <DEALS>
+                <DEAL>
+                    <!-- Indicate the subject property either under ASSET or COLLATERAL, then attach the Property1 label to it -->
+                    <!--<ASSETS>
+						<ASSET>
+							<OWNED_PROPERTY>
+								<PROPERTY p2:label="Property1">
+									<ADDRESS>
+										<AddressLineText>12398 Subject Court</AddressLineText>
+										<CityName>PENNS CREEK</CityName>
+										<CountryCode>US</CountryCode>
+										<PostalCode>17862</PostalCode>
+										<StateCode>PA</StateCode>
+									</ADDRESS>
+								</PROPERTY>
+							</OWNED_PROPERTY>
+						</ASSET>
+					</ASSETS>-->
+                    <COLLATERALS>
+                        <COLLATERAL>
+                            <SUBJECT_PROPERTY p2:label="Property1">
+                                <ADDRESS>
+                                    <AddressLineText>3892 Subject Court</AddressLineText>
+                                    <CityName>Penns Creek</CityName>
+                                    <CountryCode>US</CountryCode>
+                                    <PostalCode>17862</PostalCode>
+                                    <StateCode>PA</StateCode>
+                                </ADDRESS>
+                            </SUBJECT_PROPERTY>
+                        </COLLATERAL>
+                    </COLLATERALS>
+                    <LOANS>
+                        <LOAN>
+                            <LOAN_IDENTIFIERS>
+                                <LOAN_IDENTIFIER>
+                                    <LoanIdentifier>LOAN_4823</LoanIdentifier>
+                                </LOAN_IDENTIFIER>
+                            </LOAN_IDENTIFIERS>
+                        </LOAN>
+                    </LOANS>
+                    <PARTIES>
+                        <PARTY p2:label="Party1">
+                            <INDIVIDUAL>
+                                <CONTACT_POINTS>
+                                    <CONTACT_POINT>
+                                        <CONTACT_POINT_TELEPHONE>
+                                            <ContactPointTelephoneExtensionValue>323</ContactPointTelephoneExtensionValue>
+                                            <ContactPointTelephoneValue>7148329999</ContactPointTelephoneValue>
+                                        </CONTACT_POINT_TELEPHONE>
+                                        <CONTACT_POINT_DETAIL>
+                                            <ContactPointRoleType>Home</ContactPointRoleType>
+                                        </CONTACT_POINT_DETAIL>
+                                    </CONTACT_POINT>
+                                    <CONTACT_POINT>
+                                        <CONTACT_POINT_EMAIL>
+                                            <ContactPointEmailValue>borrower@borrower.com</ContactPointEmailValue>
+                                        </CONTACT_POINT_EMAIL>
+                                    </CONTACT_POINT>
+                                </CONTACT_POINTS>
+                                <NAME>
+                                    <FirstName>Bill</FirstName>
+                                    <LastName>Testcase</LastName>
+                                    <MiddleName>C</MiddleName>
+                                    <SuffixName>JR</SuffixName>
+                                </NAME>
+                            </INDIVIDUAL>
+                            <ADDRESSES>
+                                <!-- Optional mailing address if different from current residential address -->
+                                <ADDRESS>
+                                    <AddressLineText>123 Mailing St</AddressLineText>
+                                    <AddressType>Mailing</AddressType>
+                                    <CityName>Westminster</CityName>
+                                    <PostalCode>02061</PostalCode>
+                                    <StateCode>CA</StateCode>
+                                </ADDRESS>
+                            </ADDRESSES>
+                            <ROLES>
+                                <ROLE>
+                                    <BORROWER>
+                                        <BORROWER_DETAIL>
+                                            <BorrowerBirthDate>1980-01-02</BorrowerBirthDate>
+                                            <DependentCount>4</DependentCount>
+                                        </BORROWER_DETAIL>
+                                        <RESIDENCES>
+                                            <RESIDENCE>
+                                                <ADDRESS>
+                                                    <AddressLineText>8842 48th Ave</AddressLineText>
+                                                    <CityName>Anthill</CityName>
+                                                    <CountryCode>US</CountryCode>
+                                                    <PostalCode>65488</PostalCode>
+                                                    <StateCode>MO</StateCode>
+                                                </ADDRESS>
+                                                <RESIDENCE_DETAIL>
+                                                    <BorrowerResidencyBasisType>LivingRentFree</BorrowerResidencyBasisType>
+                                                    <BorrowerResidencyDurationMonthsCount>2</BorrowerResidencyDurationMonthsCount>
+                                                    <BorrowerResidencyDurationYearsCount>3</BorrowerResidencyDurationYearsCount>
+                                                    <BorrowerResidencyType>Current</BorrowerResidencyType>
+                                                </RESIDENCE_DETAIL>
+                                            </RESIDENCE>
+                                            <RESIDENCE>
+                                                <ADDRESS>
+                                                    <AddressLineText>123 Prior Lane</AddressLineText>
+                                                    <CityName>GARDEN GROVE</CityName>
+                                                    <CountryCode>US</CountryCode>
+                                                    <PostalCode>92843</PostalCode>
+                                                    <StateCode>CA</StateCode>
+                                                </ADDRESS>
+                                                <RESIDENCE_DETAIL>
+                                                    <BorrowerResidencyBasisType>Rent</BorrowerResidencyBasisType>
+                                                    <BorrowerResidencyDurationMonthsCount>4</BorrowerResidencyDurationMonthsCount>
+                                                    <BorrowerResidencyDurationYearsCount>11</BorrowerResidencyDurationYearsCount>
+                                                    <BorrowerResidencyType>Prior</BorrowerResidencyType>
+                                                </RESIDENCE_DETAIL>
+                                            </RESIDENCE>
+                                        </RESIDENCES>
+                                    </BORROWER>
+                                    <ROLE_DETAIL>
+                                        <PartyRoleType>Borrower</PartyRoleType>
+                                    </ROLE_DETAIL>
+                                </ROLE>
+                            </ROLES>
+                            <TAXPAYER_IDENTIFIERS>
+                                <TAXPAYER_IDENTIFIER>
+                                    <TaxpayerIdentifierType>SocialSecurityNumber</TaxpayerIdentifierType>
+                                    <TaxpayerIdentifierValue>000000015</TaxpayerIdentifierValue>
+                                </TAXPAYER_IDENTIFIER>
+                            </TAXPAYER_IDENTIFIERS>
+                        </PARTY>
+                    </PARTIES>
+                    <RELATIONSHIPS>
+                        <!-- Link borrower to the service -->
+                        <RELATIONSHIP p2:arcrole="urn:fdc:Meridianlink.com:2017:mortgage/PARTY_IsVerifiedBy_SERVICE" p2:from="Party1" p2:to="Service1"/>
+                        <!-- If a subject property is being provided, link the property to the service. Though optional, the subject property is often used with credit report add-on products -->
+                        <RELATIONSHIP p2:arcrole="urn:fdc:Meridianlink.com:2017:mortgage/PROPERTY_IsVerifiedBy_SERVICE" p2:from="Property1" p2:to="Service1"/>
+                    </RELATIONSHIPS>
+                    <SERVICES>
+                        <SERVICE p2:label="Service1">
+                            <CREDIT>
+                                <CREDIT_REQUEST>
+                                    <CREDIT_INQUIRIES>
+                                        <CREDIT_INQUIRY>
+                                            <!-- Indicating a loan type value here overrides the default one set for the login account. This impacts the subscriber code and permissible purpose code used for this inquiry -->
+                                            <CREDIT_INQUIRY_DETAIL>
+                                                <CreditLoanType>Other</CreditLoanType>
+                                                <CreditLoanTypeOtherDescription>AUTOLOAN</CreditLoanTypeOtherDescription>
+                                            </CREDIT_INQUIRY_DETAIL>
+                                            <CREDIT_REPOSITORIES>
+                                                <EXTENSION>
+                                                    <OTHER>
+                                                        <!-- This node allows you to include subscriber code information on a per order basis, which overrides the default one
+														configured for the login account -->
+                                                        <p3:CREDIT_REPOSITORIES_SETUP>
+                                                            <p3:CREDIT_REPOSITORIES_MISC_SETUP>
+                                                                <p3:IsTest>true</p3:IsTest>
+                                                                <p3:EndUserName>End-User name goes here</p3:EndUserName>
+                                                            </p3:CREDIT_REPOSITORIES_MISC_SETUP>
+                                                            <p3:EQUIFAX_SETUP>
+                                                                <p3:CustomerCode>999Z</p3:CustomerCode>
+                                                                <p3:CustomerNumber>999ZB08898</p3:CustomerNumber>
+                                                                <p3:PurposeCode>07</p3:PurposeCode>
+                                                                <p3:ReturnedDataType>W</p3:ReturnedDataType>
+                                                                <p3:SecurityCode>492</p3:SecurityCode>
+                                                            </p3:EQUIFAX_SETUP>
+                                                            <p3:EXPERIAN_SETUP>
+                                                                <p3:Preamble>FAH8</p3:Preamble>
+                                                                <p3:PurposeCode>08</p3:PurposeCode>
+                                                                <p3:SubscriberCode>2892345</p3:SubscriberCode>
+                                                                <p3:SubscriberPassword>APP</p3:SubscriberPassword>
+                                                            </p3:EXPERIAN_SETUP>
+                                                            <p3:TRANSUNION_SETUP>
+                                                                <p3:Industry>Z</p3:Industry>
+                                                                <p3:Market>06</p3:Market>
+                                                                <p3:MemberCode>2812323</p3:MemberCode>
+                                                                <p3:PurposeCode>CT</p3:PurposeCode>
+                                                                <p3:SubscriberPassword>I348</p3:SubscriberPassword>
+                                                                <p3:SubMarket>21</p3:SubMarket>
+                                                            </p3:TRANSUNION_SETUP>
+                                                        </p3:CREDIT_REPOSITORIES_SETUP>
+                                                    </OTHER>
+                                                </EXTENSION>
+                                            </CREDIT_REPOSITORIES>
+                                        </CREDIT_INQUIRY>
+                                    </CREDIT_INQUIRIES>
+                                    <CREDIT_REQUEST_DATAS>
+                                        <CREDIT_REQUEST_DATA>
+                                            <CREDIT_REPOSITORY_INCLUDED>
+                                                <CreditRepositoryIncludedEquifaxIndicator>true</CreditRepositoryIncludedEquifaxIndicator>
+                                                <CreditRepositoryIncludedExperianIndicator>true</CreditRepositoryIncludedExperianIndicator>
+                                                <CreditRepositoryIncludedTransUnionIndicator>true</CreditRepositoryIncludedTransUnionIndicator>
+                                                <EXTENSION>
+                                                    <OTHER>
+                                                        <p3:RequestEquifaxScore>true</p3:RequestEquifaxScore>
+                                                        <p3:RequestExperianFraud>true</p3:RequestExperianFraud>
+                                                        <p3:RequestExperianScore>true</p3:RequestExperianScore>
+                                                        <p3:RequestTransUnionFraud>true</p3:RequestTransUnionFraud>
+                                                        <p3:RequestTransUnionScore>true</p3:RequestTransUnionScore>
+                                                    </OTHER>
+                                                </EXTENSION>
+                                            </CREDIT_REPOSITORY_INCLUDED>
+                                            <CREDIT_REQUEST_DATA_DETAIL>
+                                                <CreditReportRequestActionType>Submit</CreditReportRequestActionType>
+                                                <!--<CreditReportRequestActionType>StatusQuery</CreditReportRequestActionType>-->
+                                                <!--<CreditReportRequestActionType>Upgrade</CreditReportRequestActionType>-->
+                                                <!--<CreditReportRequestActionType>PermUnmerge</CreditReportRequestActionType>-->
+                                                <!--<CreditReportRequestActionType>Other</CreditReportRequestActionType>
+                                                <CreditReportRequestActionTypeOtherDescription>Refresh</CreditReportRequestActionTypeOtherDescription>-->
+                                            </CREDIT_REQUEST_DATA_DETAIL>
+                                            <!-- To order any uncommon score models, indicate them here -->
+                                            <CREDIT_SCORE_MODELS>
+                                                <CREDIT_SCORE_MODEL>
+                                                    <CREDIT_SCORE_MODEL_DETAIL>
+                                                        <CreditScoreModelNameType>EquifaxBeacon5.0Auto</CreditScoreModelNameType>
+                                                    </CREDIT_SCORE_MODEL_DETAIL>
+                                                </CREDIT_SCORE_MODEL>
+                                                <CREDIT_SCORE_MODEL>
+                                                    <CREDIT_SCORE_MODEL_DETAIL>
+                                                        <CreditScoreModelNameType>TransUnionNewDelphi</CreditScoreModelNameType>
+                                                    </CREDIT_SCORE_MODEL_DETAIL>
+                                                </CREDIT_SCORE_MODEL>
+                                                <CREDIT_SCORE_MODEL>
+                                                    <CREDIT_SCORE_MODEL_DETAIL>
+                                                        <CreditScoreModelNameType>Other</CreditScoreModelNameType>
+                                                        <CreditScoreModelNameTypeOtherDescription>RM-V3</CreditScoreModelNameTypeOtherDescription>
+                                                    </CREDIT_SCORE_MODEL_DETAIL>
+                                                </CREDIT_SCORE_MODEL>
+                                            </CREDIT_SCORE_MODELS>
+                                        </CREDIT_REQUEST_DATA>
+                                    </CREDIT_REQUEST_DATAS>
+                                </CREDIT_REQUEST>
+                            </CREDIT>
+                            <SERVICE_PAYMENTS>
+                                <SERVICE_PAYMENT>
+                                    <ADDRESS>
+                                        <AddressLineText>28923 Main Drive</AddressLineText>
+                                        <CityName>Garden Grove</CityName>
+                                        <PostalCode>92843</PostalCode>
+                                        <StateCode>AL</StateCode>
+                                    </ADDRESS>
+                                    <NAME>
+                                        <FirstName>James</FirstName>
+                                        <LastName>Dean</LastName>
+                                        <MiddleName>Tommy</MiddleName>
+                                    </NAME>
+                                    <SERVICE_PAYMENT_DETAIL>
+                                        <ServicePaymentAccountIdentifier>4111111111111111</ServicePaymentAccountIdentifier>
+                                        <ServicePaymentCreditAccountExpirationDate>2019-03</ServicePaymentCreditAccountExpirationDate>
+                                        <ServicePaymentSecondaryCreditAccountIdentifier>234</ServicePaymentSecondaryCreditAccountIdentifier>
+                                    </SERVICE_PAYMENT_DETAIL>
+                                </SERVICE_PAYMENT>
+                            </SERVICE_PAYMENTS>
+                            <SERVICE_PRODUCT>
+                                <SERVICE_PRODUCT_REQUEST>
+                                    <SERVICE_PRODUCT_DETAIL>
+                                        <ServiceProductDescription>CreditOrder</ServiceProductDescription>
+                                        <ServiceProductIdentifier>ThisValueWillBeEchoedBack</ServiceProductIdentifier>
+                                        <EXTENSION>
+                                            <OTHER>
+                                                <p3:SERVICE_PREFERRED_RESPONSE_FORMATS>
+                                                    <p3:SERVICE_PREFERRED_RESPONSE_FORMAT>
+                                                        <p3:SERVICE_PREFERRED_RESPONSE_FORMAT_DETAIL>
+                                                            <p3:PreferredResponseFormatType>Xml</p3:PreferredResponseFormatType>
+                                                        </p3:SERVICE_PREFERRED_RESPONSE_FORMAT_DETAIL>
+                                                    </p3:SERVICE_PREFERRED_RESPONSE_FORMAT>
+                                                    <p3:SERVICE_PREFERRED_RESPONSE_FORMAT>
+                                                        <p3:SERVICE_PREFERRED_RESPONSE_FORMAT_DETAIL>
+                                                            <p3:PreferredResponseFormatType>Html</p3:PreferredResponseFormatType>
+                                                        </p3:SERVICE_PREFERRED_RESPONSE_FORMAT_DETAIL>
+                                                    </p3:SERVICE_PREFERRED_RESPONSE_FORMAT>
+                                                    <p3:SERVICE_PREFERRED_RESPONSE_FORMAT>
+                                                        <p3:SERVICE_PREFERRED_RESPONSE_FORMAT_DETAIL>
+                                                            <p3:PreferredResponseFormatType>Pdf</p3:PreferredResponseFormatType>
+                                                        </p3:SERVICE_PREFERRED_RESPONSE_FORMAT_DETAIL>
+                                                    </p3:SERVICE_PREFERRED_RESPONSE_FORMAT>
+                                                </p3:SERVICE_PREFERRED_RESPONSE_FORMATS>
+                                            </OTHER>
+                                        </EXTENSION>
+                                    </SERVICE_PRODUCT_DETAIL>
+                                </SERVICE_PRODUCT_REQUEST>
+                            </SERVICE_PRODUCT>
+							<SERVICE_PRODUCT_FULFILLMENT>
+								<SERVICE_PRODUCT_FULFILLMENT_DETAIL>                  
+									<VendorOrderIdentifier>file number being requested goes here</VendorOrderIdentifier>
+								</SERVICE_PRODUCT_FULFILLMENT_DETAIL>
+							</SERVICE_PRODUCT_FULFILLMENT>							
+                        </SERVICE>
+                    </SERVICES>
+                </DEAL>
+            </DEALS>
+        </DEAL_SET>
+    </DEAL_SETS>
+</MESSAGE>

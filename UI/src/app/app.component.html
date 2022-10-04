@@ -1,0 +1,127 @@
+<header *ngIf="menusBar">
+  <div class="container">
+      <nav class="navbar navbar-light bg-light">
+          <!-- <a class="navbar-brand"><img src="assets/troosk_logo.png"></a> -->
+          <a class="logo" href="/borrower/overview"></a>
+          <a class="btn main_btn" [routerLink]="['/borrower/login']" *ngIf="!isUserlogin">Login</a>
+          <div *ngIf="isUserlogin">
+           <div class="borrower_user">
+           <i class="fal fa-user-circle"></i> <a [routerLink]="['/borrower/overview']">Hi, {{UDInfo.firstName}} {{UDInfo.lastName}}</a>
+            </div>
+          </div>
+      </nav>
+  </div>
+</header>
+<div class="" style="margin: 0 !important; padding: 0 !important">
+  <div
+    class="col-12"
+    *ngIf="!installersidebar && !adminsidebar && !borrowerSidebar"
+    style="margin: 0 !important; padding: 0 !important"
+  >
+    <router-outlet (activate)="changeOfRoutes()"></router-outlet>
+  </div>
+
+  <div class="displayFlex">
+    <div *ngIf="installersidebar" class="leftMenu">
+      <app-installersidebar></app-installersidebar>
+    </div>
+    <div *ngIf="installersidebar" class="mainContent">
+      <router-outlet (activate)="changeOfRoutes()"></router-outlet>
+    </div>
+  </div>
+<div class="borrower_sec">
+  <div class="container">
+    <div class="row">
+    <div *ngIf="borrowerSidebar" class="col-md-3">
+      <app-borrower-sidebar></app-borrower-sidebar>
+    </div>
+    <div *ngIf="borrowerSidebar" class="col-md-9">
+      <router-outlet (activate)="changeOfRoutes()"></router-outlet>
+    </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- <div
+    class="col-2"
+    *ngIf="installersidebar"
+    style="margin: 0 !important; padding: 0 !important"
+  >
+    <app-installersidebar></app-installersidebar>
+  </div>
+  <div
+    class="col-10"
+    *ngIf="installersidebar"
+    style="margin: 0 !important; padding: 0 !important"
+  >
+    <router-outlet (activate)="changeOfRoutes()"></router-outlet>
+  </div> -->
+  <!--borrower side bar-->
+  <!-- <div
+    class="col-2"
+    *ngIf="borrowerSidebar"
+    style="margin: 0 !important; padding: 0 !important"
+  >
+    <app-borrower-sidebar></app-borrower-sidebar>
+  </div>
+
+  <div
+    class="col-10"
+    *ngIf="borrowerSidebar"
+    style="margin: 0 !important; padding: 0 !important"
+  >
+    <router-outlet (activate)="changeOfRoutes()"></router-outlet>
+  </div> -->
+  <!--borrower side bar-->
+
+  <div *ngIf="adminsidebar">
+    <admin-sidebar>
+      <div
+        class="admin_wrapper"
+        [class.sidenav-toggled]="sidenavtoggled"
+        id="page-top"
+      >
+        <app-adminsidebar></app-adminsidebar>
+        <div class="content-wrapper">
+
+<div class="top_header displayFlex flexEnd AlignItemCenter">
+
+
+  <div>
+                <a class="logout_btn" data-toggle="modal" data-target="#exampleModal" (click)="logout()">
+                  <i class="fa fa-fw fa-sign-out"></i>Logout</a>
+                  </div>
+</div>
+
+          <!-- <div class="container-fluid"> -->
+            <router-outlet (activate)="changeOfRoutes()"></router-outlet>
+          <!-- </div> -->
+        </div>
+      </div>
+    </admin-sidebar>
+  </div>
+</div>
+<ngx-spinner></ngx-spinner>
+<footer *ngIf="menusBar" style="padding: 32px 0">
+  <div class="container">
+      <div class="row">
+          <div class="col-md-2 col-sm-6 center">
+              All rights reserved
+          </div>
+          <div class="col-md-8  col-sm-6 center">
+              <ul class="menu-link center">
+                  <li><a href="https://www.troosk.com/terms" target="_blank">Terms & Conditions</a></li>
+                  <li><a href="https://www.troosk.com/privacy" target="_blank">Privacy Policy</a></li>
+                  <li><a href="https://www.troosk.com/esign" target="_blank">E-sign</a></li>
+                  <li><a href="https://www.troosk.com/arbitration" target="_blank">Arbitration</a></li>
+                  <li><a href="https://www.troosk.com/creditauthorization" target="_blank">Credit Authorization</a></li>
+              </ul>
+          </div>
+          <div class="col-md-2  col-sm-6 center">
+              <ul class="social-icon center">
+                  <li><a href="https://www.linkedin.com/company/troosk-inc/" target="_blank"><img src="assets/new/linkedin.svg"></a></li>
+              </ul>
+          </div>
+      </div>
+  </div>
+</footer>

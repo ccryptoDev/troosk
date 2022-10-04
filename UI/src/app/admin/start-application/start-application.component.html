@@ -1,0 +1,420 @@
+<section class="content-header">
+  <ol class="breadcrumb">
+    <li class="current">
+      <!--[routerLink]="['/admin/dashboard']-->
+      <a [routerLink]="['/admin/dashboard']">
+        <img src="../../assets/new/dashboard.svg"/> Dashboard
+        <i class="fal fa-angle-right"></i
+      ></a>
+    </li>
+    <!-- <li class="active">
+      <img src="../../assets/new/plus.svg" /> Start Application
+    </li> -->
+  </ol>
+  <!-- <h1>Start Application</h1> -->
+</section>
+<section id="createApplicationFromBackend" class="start_application">
+  <form
+    autocomplete="on"
+    class="formclass signupForm"
+    style="width: 100%;"
+    [formGroup]="apForm"
+    (ngSubmit)="sendForm()"
+    method="POST"
+  >
+    <div class="applicant-personal-info">
+
+
+
+
+      <div class="row">
+        <div class="form-group col-md-6">
+            <!-- <label>First Name</label>  -->
+            <input
+              placeholder="Identification Number"
+              formControlName="identificationNumber"
+              id="identificationNumber"
+              class="form-control form-application"
+              [ngClass]="{
+                'is-invalid':
+                  apiFormvalidation.identificationNumber.errors &&
+                  (apiFormvalidation.identificationNumber.dirty ||
+                    apiFormvalidation.identificationNumber.touched ||
+                    apibtn)
+              }"
+            />
+            <div
+              *ngIf="
+                apiFormvalidation.identificationNumber.errors &&
+                (apiFormvalidation.identificationNumber.dirty ||
+                  apiFormvalidation.identificationNumber.touched ||
+                  apibtn)
+              "
+              class="invalid-feedback"
+            >
+              <div *ngIf="apiFormvalidation.identificationNumber.errors.required">
+                Identification Number is required
+              </div>
+              <div *ngIf="apiFormvalidation.identificationNumber.errors.pattern">
+                Identification Number is not Vaild
+              </div>
+            </div>
+          </div>
+
+        <div class="form-group col-md-6">
+          <!-- <label for="ContactName">Date of Birth</label> -->
+          <input
+            name="birthday"
+            placeholder="MM/DD/YYYY"
+            formControlName="DateofBirth"
+            #birthday="bsDatepicker"
+            [maxDate]="maxDate"
+            class="form-control"
+            bsDatepicker
+            [bsConfig]="{ dateInputFormat: 'MM/DD/YYYY' }"
+            [ngClass]="{
+              'is-invalid':
+                (apiFormvalidation.DateofBirth.dirty ||
+                  apiFormvalidation.DateofBirth.touched ||
+                  apibtn) &&
+                apiFormvalidation.DateofBirth.errors
+            }"
+            [readonly]="true"
+            style="background: white"
+          />
+          <div
+            *ngIf="
+              (apiFormvalidation.DateofBirth.dirty ||
+                apiFormvalidation.DateofBirth.touched ||
+                apibtn) &&
+              apiFormvalidation.DateofBirth.errors
+            "
+            class="invalid-feedback"
+          >
+            <div *ngIf="apiFormvalidation.DateofBirth.errors.required">
+              Date of Birth is required
+            </div>
+          </div>
+        </div>
+
+        </div>
+
+
+
+
+
+
+
+
+      <div class="row">
+
+        <div class="col-md-4 form-group">
+            <!-- <label>First Name</label>  -->
+            <input
+              placeholder="First Name"
+              formControlName="FirstName"
+              id="FirstName"
+              class="form-control form-application"
+              [ngClass]="{
+                'is-invalid':
+                  apiFormvalidation.FirstName.errors &&
+                  (apiFormvalidation.FirstName.dirty ||
+                    apiFormvalidation.FirstName.touched ||
+                    apibtn)
+              }"
+            />
+            <div
+              *ngIf="
+                apiFormvalidation.FirstName.errors &&
+                (apiFormvalidation.FirstName.dirty ||
+                  apiFormvalidation.FirstName.touched ||
+                  apibtn)
+              "
+              class="invalid-feedback"
+            >
+              <div *ngIf="apiFormvalidation.FirstName.errors.required">
+                First Name is required
+              </div>
+              <div *ngIf="apiFormvalidation.FirstName.errors.pattern">
+                First Name is not Vaild
+              </div>
+            </div>
+          </div>
+
+
+        <div class="form-group col-md-4">
+            <!-- <label>Middle Name</label>  -->
+            <input
+              placeholder="Middle Name"
+              formControlName="MiddleName"
+              class="form-control form-application"
+              [ngClass]="{
+                'is-invalid':
+                  apiFormvalidation.MiddleName.errors &&
+                  (apiFormvalidation.MiddleName.dirty ||
+                    apiFormvalidation.MiddleName.touched ||
+                    apibtn)
+              }"
+            />
+            <div
+              *ngIf="
+                apiFormvalidation.MiddleName.errors &&
+                (apiFormvalidation.MiddleName.dirty ||
+                  apiFormvalidation.MiddleName.touched ||
+                  apibtn)
+              "
+              class="invalid-feedback"
+            >
+              <div *ngIf="apiFormvalidation.MiddleName.errors.pattern">
+                Middle Name is not Vaild
+              </div>
+            </div>
+          </div>    
+        
+                <div class="form-group col-md-4">
+            <!-- <label>Last Name</label>  -->
+            <input
+              placeholder="Last Name"
+              formControlName="LastName"
+              class="form-control form-application"
+              [ngClass]="{
+                'is-invalid':
+                  apForm.controls.LastName.errors &&
+                  (apForm.controls.LastName.dirty ||
+                    apForm.controls.LastName.touched ||
+                    apibtn)
+              }"
+            />
+            <div
+              *ngIf="
+                apForm.controls.LastName.errors &&
+                (apForm.controls.LastName.dirty ||
+                  apForm.controls.LastName.touched ||
+                  apibtn)
+              "
+              class="invalid-feedback"
+            >
+              <div *ngIf="apForm.controls.LastName.errors.required">
+                Last Name is required
+              </div>
+              <div *ngIf="apForm.controls.LastName.errors.pattern">
+                Last Name is not Vaild
+              </div>
+            </div>
+          </div>
+
+
+
+      </div>
+
+
+
+ 
+      <div class="row">
+        <div class="form-group col-md-4">
+            <!-- <label>Unit/Apartment</label>  -->
+            <input
+              placeholder="Unit/Apartment"
+              formControlName="UnitApartment"
+              class="form-control form-application"
+              [ngClass]="{
+                'is-invalid':
+                  (apiFormvalidation.UnitApartment.dirty ||
+                    apiFormvalidation.UnitApartment.touched ||
+                    apibtn) &&
+                  apiFormvalidation.UnitApartment.errors
+              }"
+            />
+            <div
+              *ngIf="
+                (apiFormvalidation.UnitApartment.dirty ||
+                  apiFormvalidation.UnitApartment.touched ||
+                  apibtn) &&
+                apiFormvalidation.UnitApartment.errors
+              "
+              class="invalid-feedback"
+            >
+              <div *ngIf="apiFormvalidation.UnitApartment.errors.required">
+                Unit/Apartment is required
+              </div>
+            </div>
+        </div>
+        <div class="form-group col-md-4">
+            <input
+              placeholder="Street Number"
+              type="text"
+              formControlName="streetNumber"
+              class="form-control form-application"
+              [ngClass]="{
+                'is-invalid':
+                  (apiFormvalidation.streetNumber.dirty ||
+                    apiFormvalidation.streetNumber.touched ||
+                    apibtn) &&
+                  apiFormvalidation.streetNumber.errors
+              }"
+            />
+            <div
+              *ngIf="
+                (apiFormvalidation.streetNumber.dirty ||
+                  apiFormvalidation.streetNumber.touched ||
+                  apibtn) &&
+                apiFormvalidation.streetNumber.errors
+              "
+              class="invalid-feedback"
+            >
+              <div *ngIf="apiFormvalidation.streetNumber.errors.required">
+                Street Address is required
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group col-md-4">
+            <input
+              placeholder="Street Name"
+              formControlName="streetName"
+              class="form-control form-application"
+              [ngClass]="{
+                'is-invalid':
+                  (apiFormvalidation.streetName.dirty ||
+                    apiFormvalidation.streetName.touched ||
+                    apibtn) &&
+                  apiFormvalidation.streetName.errors
+              }"
+            />
+            <div
+              *ngIf="
+                (apiFormvalidation.streetName.dirty ||
+                  apiFormvalidation.streetName.touched ||
+                  apibtn) &&
+                apiFormvalidation.streetName.errors
+              "
+              class="invalid-feedback"
+            >
+              <div *ngIf="apiFormvalidation.streetName.errors.required">
+                Street Name is required
+              </div>
+            </div>
+          </div>
+        </div>
+  
+      <div class="row">
+        <div class="form-group col-md-4 ">
+            <!-- <label>City</label>  -->
+            <input
+              placeholder="City"
+              formControlName="City"
+              class="form-control form-application"
+              [ngClass]="{
+                'is-invalid':
+                  (apiFormvalidation.City.dirty ||
+                    apiFormvalidation.City.touched ||
+                    apibtn) &&
+                  apiFormvalidation.City.errors
+              }"
+            />
+            <div
+              *ngIf="
+                (apiFormvalidation.City.dirty ||
+                  apiFormvalidation.City.touched ||
+                  apibtn) &&
+                apiFormvalidation.City.errors
+              "
+              class="invalid-feedback"
+            >
+              <div *ngIf="apiFormvalidation.City.errors.required">
+                City is required
+              </div>
+              <div *ngIf="apiFormvalidation.City.errors.pattern">
+                City is not Vaild
+              </div>
+            </div>
+        </div>
+        <div class="form-group col-md-4">
+            <select
+              class="form-control form-application"
+              formControlName="State"
+              [ngClass]="{
+                'is-invalid':
+                  (apiFormvalidation.State.dirty ||
+                    apiFormvalidation.State.touched ||
+                    apibtn) &&
+                  apiFormvalidation.State.errors
+              }"
+            >
+              <option value="" selected="selected" disabled="disabled"
+                >State</option
+              >
+              <option [value]="state.id" *ngFor="let state of stateList">{{
+                state.displayName
+              }}</option>
+            </select>
+            <div
+              *ngIf="
+                (apiFormvalidation.State.dirty ||
+                  apiFormvalidation.State.touched ||
+                  apibtn) &&
+                apiFormvalidation.State.errors
+              "
+              class="invalid-feedback"
+            >
+              <div *ngIf="apiFormvalidation.State.errors.required">
+                State is required
+              </div>
+            </div>
+          </div>
+        <div class="form-group col-md-4">
+            <input
+              placeholder="Zip Code"
+              class="form-control form-application"
+              formControlName="ZipCode"
+              [ngClass]="{
+                'is-invalid':
+                  (apiFormvalidation.ZipCode.dirty ||
+                    apiFormvalidation.ZipCode.touched ||
+                    apibtn) &&
+                  apiFormvalidation.ZipCode.errors
+              }"
+            />
+            <div
+              *ngIf="
+                (apiFormvalidation.ZipCode.dirty ||
+                  apiFormvalidation.ZipCode.touched ||
+                  apibtn) &&
+                apiFormvalidation.ZipCode.errors
+              "
+              class="invalid-feedback"
+            >
+              <div *ngIf="apiFormvalidation.ZipCode.errors.required">
+                Zip Code is required
+              </div>
+              <div *ngIf="apiFormvalidation.ZipCode.errors.pattern">
+                Zip Code is not Vaild
+              </div>
+            </div>
+          </div>
+      </div>
+
+
+    
+    </div>
+    <div class="textAlignCenter mt_50">
+      <button type="submit" class="btn main_hover_btn" (submit)="sendForm()" >
+        Submit
+      </button> 
+    </div>
+  </form>
+</section>
+<ng-template #messagebox>
+  <div class="modal-body text-center">
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <p class="headtext">Message</p>
+    <p *ngFor="let m of message">{{ m }}</p>
+  </div>
+</ng-template>

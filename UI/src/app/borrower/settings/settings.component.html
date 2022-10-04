@@ -1,0 +1,94 @@
+<div class="body_content">
+  <h5 class="body_content_header">Change password</h5>
+  <div class="content_box">
+    <form [formGroup]="changepwForm" (ngSubmit)="changePassword()">
+      <label for="currentpw">Current Password</label><br />
+      <input
+        type="password"
+        id="currentpw"
+        formControlName="currentpw"
+        class="form-control"
+        [class.is-invalid]="
+          f.currentpw.invalid && (f.currentpw.touched || fSubmitted)
+        "
+      />
+      <small
+        *ngIf="f.currentpw.invalid && (f.currentpw.touched || fSubmitted)"
+        class="text-danger"
+        >Current Password is required</small
+      >
+      <br />
+      <label for="newpw">New Password</label><br />
+      <input
+        type="password"
+        id="newpw"
+        formControlName="newpw"
+        class="form-control"
+        [class.is-invalid]="f.newpw.invalid && (f.newpw.touched || fSubmitted)"
+      />
+      <small
+        *ngIf="f.newpw.hasError('required') && (f.newpw.touched || fSubmitted)"
+        class="text-danger"
+        >
+        New Password is required
+      </small>
+      <small
+        *ngIf="f.newpw.hasError('pattern') && (f.newpw.touched || fSubmitted)"
+        class="text-danger"
+        >
+        Password should be at least 8 characters
+        long and should contain one uppercase, one lowercase, one number and one special
+        character
+      </small>
+      <br />
+      <label for="cnewpw">Confirm New Password</label><br />
+      <input
+        type="password"
+        id="cnewpw"
+        formControlName="cnewpw"
+        class="form-control"
+        [class.is-invalid]="
+          f.cnewpw.invalid && (f.cnewpw.touched || fSubmitted)
+        "
+      />
+      <div *ngIf="f.cnewpw.touched || fSubmitted">
+        <small *ngIf="f.cnewpw.errors?.required" class="text-danger"
+          >Confirm password is required</small
+        >
+        <small *ngIf="changepwForm.errors?.misMatch" class="text-danger"
+          >Password not matched</small
+        >
+      </div>
+      <br />
+      <button type="submit" class="btn main_btn">Save</button>
+    </form>
+  </div>
+  <div class="fs22px pb20">Two factor Authentication</div>
+  <div class="displayFlex spaceBetween pb20">
+    <div>Enable Two factor Authentication</div>
+    <div class=" " style="display:grid;">
+      <div class="switch">
+        <input type="checkbox" id="twoFactorAuth"
+          [checked]="lv_twoFactorAuth=='Y'"
+          #twoFactorAuth
+          (change)="toggleTwoFactorAuth(twoFactorAuth.checked)" />
+        <label for="twoFactorAuth"></label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #messagebox>
+  <div class="modal-body text-center">
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <p class="headtext">Message</p>
+    <p *ngFor="let m of message">{{ m }}</p>
+  </div>
+</ng-template>

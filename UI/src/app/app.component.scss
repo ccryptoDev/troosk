@@ -1,0 +1,33 @@
+.mainContainer {
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+}
+
+.logo {
+  background: url("../assets/troosk_logo_small.png") no-repeat;
+  background-size: contain;
+  color: transparent;
+  height: 45px;
+  width: 110px;
+  border: 1px;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.leftMenu {
+  width: 250px;
+  background: #f8f8f8;
+  height: 100vh;
+  position: fixed;
+  box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
+}
+.mainContent {
+  width: 100%;
+  margin-left: 250px;
+}
+

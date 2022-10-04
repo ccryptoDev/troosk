@@ -1,0 +1,31 @@
+<accordion >
+  <accordion-group>
+    <h2 accordion-heading>Financing Agreement Documents <i class="far fa-chevron-down"></i></h2>
+    <table class="table table-bordered">
+      <tbody *ngIf="data.document">
+      <tr *ngFor="let doc of data.document; let i = index">
+        <td><img class="ag_docs" src="../../../assets/new/document_title.svg" alt="document_title">{{ doc['fileName'] }}</td>
+        <td><a href="javascript:void(0)" (click)="downloadDocumentPdf(doc['fileData'])"><img class="view_download" src="../../../assets/new/download.svg" alt="download"></a></td>
+      </tr>
+      <tr class="text-center" *ngIf="!data.document || data.document.length==0">
+        <td colspan="3">No records</td>
+      </tr>
+      </tbody>
+    </table>
+  </accordion-group>
+</accordion>
+
+<ng-template #messagebox>
+  <div class="modal-body text-center">
+    <button
+      type="button"
+      class="close pull-right"
+      aria-label="Close"
+      (click)="close()"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <p class="headtext">Message</p>
+    <p *ngFor="let m of message">{{ m }}</p>
+  </div>
+</ng-template>
