@@ -75,6 +75,9 @@ export class CustomerEntity extends BaseEntity {
   @Column({ default: null })
   streetAddress: string;
 
+  @Column({ default: null, name: 'street_number' })
+  streetNumber: number;
+
   @Column({ default: null, name: 'address_line_1' })
   addressLine1: string;
 
