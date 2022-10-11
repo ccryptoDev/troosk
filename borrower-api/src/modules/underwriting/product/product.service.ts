@@ -1,5 +1,4 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import moment from 'moment';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LoanRepository } from '../../../repository/loan.repository';
 import { PreBureauService } from '../pre-bureau/pre-bureau.service';
@@ -70,7 +69,7 @@ export class ProductService {
       loanId,
       `Stage 1 Decision ${
         decision.loanApproved ? 'Approved' : 'Declined'
-      }: ${JSON.stringify(decision)}`,
+      }: ${JSON.stringify(decision.declinedRuleMsg)}`,
     );
 
     if (!decision.loanApproved) {
@@ -103,7 +102,7 @@ export class ProductService {
       loanId,
       `Stage 2 Decision ${
         decision.loanApproved ? 'Approved' : 'Declined'
-      }: ${JSON.stringify(decision)}`,
+      }: ${JSON.stringify(decision.declinedRuleMsg)}`,
     );
 
     this.updateLoanStatus(loanId, decision);
@@ -114,73 +113,73 @@ export class ProductService {
   decisioningRun(loanId: string, rules, ruleUserValueFuncs) {
     const result = { ...this.resultDefault };
 
-    Object.keys(rules).forEach(ruleKey => {
-      const rule = rules[ruleKey];
-      if (
-        !rule.disabled &&
-        ruleUserValueFuncs[ruleKey] &&
-        typeof ruleUserValueFuncs[ruleKey] === 'function'
-      ) {
-        result.ruleData[rule.ruleId] = {
-          description: rule.description,
-          message: 'Not applied',
-          passed: true,
-          ruleId: rule.ruleId,
-          userValue: null,
-        };
-        const userValue = ruleUserValueFuncs[ruleKey]();
-        const { passed, message } = this.getRulePassedMessage(
-          rule,
-          userValue,
-          loanId,
-        );
-        result.ruleData[rule.ruleId].message = message;
-        result.ruleData[rule.ruleId].passed = passed;
-        result.ruleData[rule.ruleId].userValue = userValue;
-        if (!passed) {
-          result.loanApproved = false;
+    try {
+      Object.keys(rules).forEach(ruleKey => {
+        const rule = rules[ruleKey];
+        if (
+          !rule.disabled &&
+          ruleUserValueFuncs[ruleKey] &&
+          typeof ruleUserValueFuncs[ruleKey] === 'function'
+        ) {
+          result.ruleData[rule.ruleId] = {
+            description: rule.description,
+            message: 'Not applied',
+            passed: true,
+            ruleId: rule.ruleId,
+            userValue: null,
+          };
+          const userValue = ruleUserValueFuncs[ruleKey]();
+          const { passed, message } = this.getRulePassedMessage(
+            rule,
+            userValue,
+            loanId,
+          );
+          result.ruleData[rule.ruleId].message = message;
+          result.ruleData[rule.ruleId].passed = passed;
+          result.ruleData[rule.ruleId].userValue = userValue;
+          if (!passed) {
+            result.loanApproved = false;
+          }
+          if (result.ruleData[rule.ruleId].passed) {
+            result.approvedRuleMsg.push(result.ruleData[rule.ruleId].message);
+          } else {
+            result.declinedRuleMsg.push(result.ruleData[rule.ruleId].message);
+            result.declinedRules.push(rule.ruleId);
+          }
+          result.ruleApprovals[rule.ruleId] = result.ruleData[rule.ruleId].passed
+            ? 1
+            : 0;
         }
-        if (result.ruleData[rule.ruleId].passed) {
-          result.approvedRuleMsg.push(result.ruleData[rule.ruleId].message);
-        } else {
-          result.declinedRuleMsg.push(result.ruleData[rule.ruleId].message);
-          result.declinedRules.push(rule.ruleId);
-        }
-        result.ruleApprovals[rule.ruleId] = result.ruleData[rule.ruleId].passed
-          ? 1
-          : 0;
-      }
-    });
+      });
+    } catch (e) {
+
+    }
 
     return result;
   }
 
   async stage1Values(loanId: string) {
     const loan = await this.loanRepository.findOne({ where: { id: loanId } });
-
+    const report = await this.preBureauService.generalReport(loanId, loan.customer_id);
     const {
       settledOrChargedOffLoansCount,
-      pastDueLoan,
-      lastDeclinedLoan,
+      lastPastDue,
+      lastDeclinedLoanDays,
       averageBalance,
       numberOfOverdrafts,
-    } = await this.preBureauService.generalReport(loanId);
+    } = report;
 
-    const rule2Default = 7;
+    this.logService.addLogs(loanId, JSON.stringify(report));
 
     return {
       rule1: () => {
         return settledOrChargedOffLoansCount > 0;
       },
       rule2: () => {
-        return pastDueLoan
-          ? moment(pastDueLoan.createdAt).diff(moment(), 'M')
-          : rule2Default;
+        return lastPastDue;
       },
       rule3: () => {
-        return lastDeclinedLoan
-          ? moment(lastDeclinedLoan.updatedAt).diff(moment(), 'days')
-          : this.configService.get('deniedLastInDays');
+        return lastDeclinedLoanDays;
       },
       rule4: () => {
         return loan.annualIncome;
@@ -220,6 +219,7 @@ export class ProductService {
   }
 
   async stage2Values(loanId: string) {
+    const report = await this.transunionService.getTUReport(loanId);
     const {
       OFAC06800,
       creditUsageAT20,
@@ -232,7 +232,9 @@ export class ProductService {
       scoreFICO,
       DTI,
       grossIncome,
-    } = await this.transunionService.getTUReport(loanId);
+    } = report;
+
+    this.logService.addLogs(loanId, JSON.stringify(report));
 
     const finicityIncome = await this.getFinicityIncome(loanId);
 
@@ -241,6 +243,7 @@ export class ProductService {
     });
 
     const tier = this.configService.get('tier')(scoreFICO);
+    const PTI = this.getPTI(loan, tier);
 
     this.setOfferParams(loan, tier, scoreFICO);
 
@@ -276,17 +279,7 @@ export class ProductService {
         return DTI;
       },
       rule17: () => {
-        // todo move to separate function
-        const monthInYear = 12;
-        const minLoanAmount = this.configService.get('minimumLoanAmount');
-        const minLoanTerm = this.configService.get('minimumLoanTerm');
-        const minLoanTermInYears = minLoanTerm / monthInYear;
-        const monthlyIncome = loan.annualIncome / monthInYear;
-        const loanAmountWithApr =
-          minLoanAmount + minLoanAmount * tier * minLoanTermInYears;
-        const monthlyPayment = loanAmountWithApr / minLoanTerm;
-
-        return monthlyPayment / monthlyIncome;
+        return PTI;
       },
       rule18: () => {
         return (
@@ -297,6 +290,19 @@ export class ProductService {
         );
       },
     };
+  }
+
+  getPTI(loan, tier) {
+    const monthInYear = 12;
+    const minLoanAmount = this.configService.get('minimumLoanAmount');
+    const minLoanTerm = this.configService.get('minimumLoanTerm');
+    const minLoanTermInYears = minLoanTerm / monthInYear;
+    const monthlyIncome = loan.annualIncome / monthInYear;
+    const loanAmountWithApr =
+      minLoanAmount + minLoanAmount * tier * minLoanTermInYears;
+    const monthlyPayment = loanAmountWithApr / minLoanTerm;
+
+    return monthlyPayment / monthlyIncome;
   }
 
   getRulePassedMessage(
@@ -337,14 +343,12 @@ export class ProductService {
         );
     }
 
-    const result = {
+    return {
       message: `${rule.ruleId}: ${rule.description} ${relation} ${
         rule.value
       } then ${passed ? 'pass' : 'decline'}`,
       passed,
     };
-
-    return result;
   }
 
   setOfferParams(loan: Loan, tier: number, scoreFICO: number) {

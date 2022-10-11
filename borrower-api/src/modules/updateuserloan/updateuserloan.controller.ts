@@ -14,6 +14,7 @@ import { UpdateCustomerDetailsDto } from './dto/updateCustomerDetails.dto';
 import { UpdateDisbursementAccountIdDto } from './dto/updateDisbursementAccountId.dto';
 import { UpdatePaymentAccountIdDto } from './dto/updatePaymentAccountId.dto';
 import { CustomerAddressDto } from './dto/customer-address.dto';
+import { FinicityIdDto } from './dto/finicity-id.dto';
 
 @ApiTags('Update User Loan')
 @Controller('updateuserloan')
@@ -82,6 +83,20 @@ export class UpdateuserloanController {
     return this.updateuserloanService.editPaymentAccountId(
       loanId,
       paymentAccountIdDto,
+    );
+  }
+
+  // TODO remove after uat
+  @Put('/:loanId/finicity')
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Edit disbursement account id' })
+  async setFinicityId(
+    @Param('loanId') loanId: string,
+    @Body() finicityData: FinicityIdDto,
+  ) {
+    return this.updateuserloanService.setFinicityId(
+      loanId,
+      finicityData,
     );
   }
 }

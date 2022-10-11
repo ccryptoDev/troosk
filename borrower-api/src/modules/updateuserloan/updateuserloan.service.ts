@@ -17,6 +17,7 @@ import { RepayClient } from './repay-client';
 import { SecCode } from './dto/retrieve.paytoken';
 import { ACHDetailsDto } from './dto/a-c-h-details.dto';
 import { FinicityClient } from '../finicity/finicity.client';
+import { FinicityIdDto } from './dto/finicity-id.dto';
 
 @Injectable()
 export class UpdateuserloanService {
@@ -208,5 +209,21 @@ export class UpdateuserloanService {
     } catch (e) {
       return Responses.fatalError(e);
     }
+  }
+
+  async setFinicityId(loanId: string, finicityData: FinicityIdDto) {
+    const loan = await this.loanRepository.findOne({where: {id: loanId}});
+
+    if (loan) {
+      const customer = await this.customerRepository.findOne({where: { id: loan.customer_id }});
+      if (customer) {
+        customer.finicity_id = finicityData.finicityId;
+        await customer.save();
+
+        return Responses.success();
+      }
+    }
+
+    return Responses.validationError('Fail');
   }
 }

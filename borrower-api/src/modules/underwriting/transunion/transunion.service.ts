@@ -46,7 +46,16 @@ export class TransunionService {
     credentials: TransUnionCredentials,
     customer: CustomerEntity,
   ) {
-    const [streetNumber, streetName] = customer.addressLine1.split(' ');
+    let [streetNumber, streetName] = customer?.addressLine1?.split(' ');
+
+    if (customer.streetAddress) {
+      streetName = customer.streetAddress
+    }
+
+    if (customer.streetNumber) {
+      streetNumber = customer.streetNumber.toString()
+    }
+
     const subjectRecord: any = {
       indicative: {
         name: {
@@ -59,7 +68,6 @@ export class TransunionService {
         address: {
           status: 'current',
           street: {
-            number: streetNumber,
             name: streetName,
           },
           location: {
@@ -102,6 +110,10 @@ export class TransunionService {
       ],
     };
 
+    if (streetNumber) {
+      subjectRecord.indicative.address.street.number = streetNumber;
+    }
+
     const ssn = customer.socialSecurityNumber
       ? customer.socialSecurityNumber.replace(/[^0-9]/g, '')
       : null;
@@ -114,6 +126,12 @@ export class TransunionService {
       ? moment(customer.birthday, 'YYYY-MMMM-DD').format('YYYY-MM-DD')
       : null;
     if (dateOfBirth) subjectRecord.indicative.dateOfBirth = dateOfBirth;
+
+    const phone = this.buildPhone(customer);
+
+    if (phone !== null) {
+      subjectRecord.indicative.phone = phone;
+    }
 
     return {
       document: 'request',
@@ -175,6 +193,23 @@ export class TransunionService {
     });
 
     return this.buildTransUnions(JSON.parse(creditPullTU.file)?.creditBureau);
+  }
+
+  buildPhone(customer: CustomerEntity) {
+    if (!customer.phone) { return null; }
+
+    const areaCode = customer.phone.slice(0, 3);
+    const exchange = customer.phone.slice(3, 6);
+    const suffix = customer.phone.slice(6);
+
+    return {
+      number: {
+        type: 'standard',
+        areaCode,
+        exchange,
+        suffix
+      }
+    }
   }
 
   buildTransUnions(creditReport: any) {

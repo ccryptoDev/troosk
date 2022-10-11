@@ -1,13 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { of } from 'rxjs';
 import { StatusFlags } from '../../../entities/loan.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LoanRepository } from '../../../repository/loan.repository';
 import { FinicityMockService } from './finicity-mock.service';
-import { object } from 'twilio/lib/base/serialize';
-import { CreditPull } from '../../../entities/creditPull.entity';
 import { CreditPullRepository } from '../../../repository/creditPull.repository';
-import { LogService } from '../../../common/log.service';
+import * as moment from 'moment';
 
 @Injectable()
 export class PreBureauService {
@@ -16,7 +13,6 @@ export class PreBureauService {
     @InjectRepository(LoanRepository) private loanRepository: LoanRepository,
     @InjectRepository(CreditPullRepository)
     private creditPullRepository: CreditPullRepository,
-    private logService: LogService,
   ) {}
 
   getAverageBalanceFromFinicityReport(report) {
@@ -31,52 +27,64 @@ export class PreBureauService {
       .slice(-3)
       .map((balance: number) => (averageBalance += balance));
 
+    if (averageBalance > 0) {
+      averageBalance = Math.floor(averageBalance / 3);
+    }
+
     return averageBalance;
   }
 
   getOverdraftsFromFinicityReport(report) {
     const {
-      assets: {
-        customer: { monthlyDaysWithNegativeBalance },
+      nsf: {
+        monthlyNSFOccurrences,
       },
     } = report;
-    let averageBalance = 0;
+    let overdrafts = 0;
 
-    Object.values(monthlyDaysWithNegativeBalance)
-      .slice(-3)
-      .map((balance: number) => (averageBalance += balance));
+    for (const [month, value] of Object.entries(monthlyNSFOccurrences)) {
+      if (moment().diff(moment(month), 'M') < 4) {
+        overdrafts += +value;
+      }
+    }
 
-    return averageBalance;
+    return overdrafts;
   }
 
-  async generalReport(requestId) {
+  async generalReport(loanId: string, customerId: string) {
     const settledOrChargedOffLoansCount = await this.loanRepository
       .createQueryBuilder('loan')
-      .where('loan.status_flag = :status', { status: StatusFlags.chargedOff })
-      .orWhere('loan.status_flag = :status', { status: StatusFlags.settled })
+      .where('loan.customer_id = :customerId AND (loan.status_flag = :status1 OR loan.status_flag = :status2)',
+      { status1: StatusFlags.chargedOff, status2: StatusFlags.settled, customerId })
       .getCount();
+
     const lastDeclinedLoan = await this.loanRepository
       .createQueryBuilder('loan')
-      .where('loan.status_flag = :status', { status: StatusFlags.cancelled })
+      .where(
+        'loan.id != :loanId AND loan.customer_id = :customerId AND loan.status_flag = :status',
+      { loanId, customerId, status: StatusFlags.denied })
       .orderBy('loan.createdAt', 'DESC')
       .getOne();
 
     const pastDueLoan = await this.loanRepository.findOne({
-      where: { id: requestId, status_flag: StatusFlags.pastDue },
+      where: { status_flag: StatusFlags.pastDue, customer_id: customerId},
       order: {
         createdAt: 'DESC',
       },
     });
 
     const finicityAggregatedReport = await this.creditPullRepository.findOne({
-      where: { loan_id: requestId },
+      where: { loan_id: loanId },
       order: {
         created_at: 'DESC',
       },
       select: ['file'],
     });
+
     let averageBalance = 251;
     let numberOfOverdrafts = 0;
+    const rule2Default = 7;
+    const deniedLastInDays = 90;
 
     if (finicityAggregatedReport) {
       const { ca360_data } = JSON.parse(finicityAggregatedReport?.file);
@@ -86,10 +94,16 @@ export class PreBureauService {
       }
     }
 
+    const lastPastDue = pastDueLoan ? moment(pastDueLoan.createdAt).diff(moment(), 'M')
+      : rule2Default
+
+    const lastDeclinedLoanDays = lastDeclinedLoan ?
+      moment(lastDeclinedLoan.updatedAt).diff(moment(), 'days') : deniedLastInDays
+
     return {
       settledOrChargedOffLoansCount,
-      lastDeclinedLoan,
-      pastDueLoan,
+      lastDeclinedLoanDays,
+      lastPastDue,
       averageBalance,
       numberOfOverdrafts,
     };
