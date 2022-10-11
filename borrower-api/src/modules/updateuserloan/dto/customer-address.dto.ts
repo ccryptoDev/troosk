@@ -40,6 +40,20 @@ export class CustomerAddressDto {
 
   @IsString()
   @ApiProperty({
+    description: 'Street Name',
+    example: 'Janet Ln',
+  })
+  streetAddress: string;
+
+  @IsString()
+  @ApiProperty({
+    description: 'Street Number',
+    example: '213',
+  })
+  streetNumber: string;
+
+  @IsString()
+  @ApiProperty({
     description: 'Date of birth',
     example: '1963-May-01',
   })
