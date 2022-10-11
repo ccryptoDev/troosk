@@ -30,7 +30,7 @@ export class LogEntity extends BaseEntity {
   @Column({ length: 10, default: null })
   loan_id: string;
 
-  @Column({ default: null })
+  @Column({ default: null, type: 'text' })
   error: string;
 
   @Column({ type: 'uuid', default: null })

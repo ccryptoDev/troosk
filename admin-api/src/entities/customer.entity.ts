@@ -27,6 +27,11 @@ export enum IdCardType {
 
 @Entity({ name: 'tblcustomer' })
 export class CustomerEntity extends BaseEntity {
+  @BeforeInsert()
+  private beforeInsert() {
+    this.state_id_number = this.identificationNumber;
+  }
+
   @PrimaryGeneratedColumn()
   ref_no: number;
 
@@ -42,11 +47,6 @@ export class CustomerEntity extends BaseEntity {
 
   @Column({ default: null })
   state_id_number: string;
-
-  @BeforeInsert()
-  private beforeInsert() {
-    this.state_id_number = this.state + '-' + this.identificationNumber;
-  }
 
   @Column({ default: null })
   email: string;
@@ -74,6 +74,9 @@ export class CustomerEntity extends BaseEntity {
 
   @Column({ default: null })
   streetAddress: string;
+
+  @Column({ default: null, name: 'street_number' })
+  streetNumber: string;
 
   @Column({ default: null, name: 'address_line_1' })
   addressLine1: string;
