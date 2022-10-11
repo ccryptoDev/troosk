@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   HttpCode,
@@ -31,7 +32,9 @@ export class FinicityController {
   @Post('/web-hook/:loanId')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: 'Save bank accounts data from Finicity' })
-  async finicityWebHook(@Param('loanId') loanId: string) {
-    return this.finicityService.finicityWebHook(loanId);
+  async finicityWebHook(
+    @Param('loanId') loanId: string,
+    @Body() body: any) {
+    return this.finicityService.finicityWebHook(loanId, body);
   }
 }

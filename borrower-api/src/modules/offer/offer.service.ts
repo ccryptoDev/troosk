@@ -92,12 +92,14 @@ export class OfferService {
 
       const frequencyDescription = `Monthly, on the ${loan.dayOfMonth} day of each month`;
 
-      return bankAccounts.map(bankAccount => ({
-        id: bankAccount.account_id,
-        accountNumberDisplay: bankAccount.account_number,
-        name: bankAccount.account_name,
+      return {
         payment_frequency: frequencyDescription,
-      }));
+        accounts: bankAccounts.map(bankAccount => ({
+          id: bankAccount.account_id,
+          accountNumberDisplay: bankAccount.account_number,
+          name: bankAccount.account_name,
+        })),
+      };
     } catch (e) {
       Responses.fatalError(e);
     }

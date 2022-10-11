@@ -92,8 +92,7 @@ export class FinicityService {
   async bankAccounts(loanId: string) {
     try {
       const loan = await this.loanRepository.findOne({ id: loanId });
-      loan.lastScreen = LastScreenModel.BankAccounts;
-      await loan.save();
+
       const customer = await this.customerRepository.findOne({
         id: loan.customer_id,
       });
@@ -103,12 +102,14 @@ export class FinicityService {
       );
 
       if (bankAccounts?.length && loan.verificationStatus === Verify.warning) {
+        // todo filter accounts to use only accounts which matched with last name
         for (const bankAccount of bankAccounts) {
           try {
             const owner: Owner = await this.finicityClient.getOwner(
               bankAccount.customerId,
               bankAccount.id,
             );
+
             const matchName =
               customer.lastName === owner.ownerName.split(' ')[1];
             if (!matchName) {
@@ -117,7 +118,7 @@ export class FinicityService {
                 `Applicant’s Last name does not match with Last name on bank account ${bankAccount.id}`,
               );
               loan.status = 'V13';
-              loan.status_flag = StatusFlags.denied;
+              loan.status_flag = StatusFlags.cancelled;
             } else {
               loan.status = '';
               loan.status_flag = StatusFlags.waiting;
@@ -129,7 +130,7 @@ export class FinicityService {
         }
       }
 
-      loan.save();
+      await loan.save();
 
       return bankAccounts;
     } catch (e) {
@@ -140,23 +141,21 @@ export class FinicityService {
   async saveBankAccounts(loanId): Promise<void> {
     try {
       const fetchedBankAccountsResponse = await this.bankAccounts(loanId);
-      const accounts = fetchedBankAccountsResponse.message[0]?.accounts;
+      const { accounts } = fetchedBankAccountsResponse;
       const costumer = await this.customerRepository.findOne({
         where: { loan_id: loanId },
       });
 
       if (!accounts?.length) {
-        await this.logService.addLogs(
+        this.logService.addLogs(
           loanId,
           'Unable to access or login to applicant’s bank account',
         );
         await this.loanRepository.update(
           { id: loanId },
-          { status_flag: StatusFlags.cancelled }
+          { status_flag: StatusFlags.cancelled, status: 'V12' }
         );
-      }
-
-      if (accounts?.length) {
+      } else {
         const newBankAccountsArray = [];
         for (const fetchedBankAccount of accounts) {
           const newBankAccount = new UserBankAccountsEntity();
@@ -176,7 +175,7 @@ export class FinicityService {
         await this.userBankAccountsRepository.save(newBankAccountsArray);
       }
     } catch (e) {
-      this.logService.errorLogs(loanId, 'finicity: save accounts crash', e);
+      this.logService.errorLogs(loanId, 'finicity: save accounts crash', JSON.stringify(e));
     }
   }
 
@@ -213,25 +212,43 @@ export class FinicityService {
     return creditPull.save();
   }
 
-  async finicityWebHook(loanId: string) {
-    // todo add status check
-    this.triggerJobs(loanId);
+  async finicityWebHook(loanId: string, body) {
+    this.logService.addLogs(loanId, 'Finicity WebHook Data: ' + JSON.stringify(body));
+
+    if (body?.eventType === 'added') {
+      this.triggerJobs(loanId);
+    }
 
     return Responses.success('Accepted');
   }
 
   private async triggerJobs(loanId) {
     try {
+      if (await this.validateLoan(loanId) === false) {
+        return;
+      }
+
       // fetch from Finicity and store in DB user accounts
       await this.saveBankAccounts(loanId);
 
       // fetch aggregated data from finicity and store to DB
       await this.saveAggregatedAttributes(loanId);
 
+      if (await this.validateLoan(loanId) === false) {
+        return;
+      }
+
       this.productService.underWriting(loanId);
     } catch (e) {
-      this.logService.errorLogs(loanId, 'finicity: web hook crash', e);
+      this.logService.errorLogs(loanId, 'Jobs crash', JSON.stringify(e));
     }
+  }
+
+  private async validateLoan(loanId): Promise<boolean> {
+    const loan = await this.loanRepository.findOne({ where: { id: loanId } });
+    const statuses = [StatusFlags.waiting, StatusFlags.pending];
+
+    return statuses.indexOf(loan.status_flag) !== -1
   }
 
   private firstCharToUpperCase = (stringItem: string) =>

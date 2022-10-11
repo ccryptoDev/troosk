@@ -124,11 +124,8 @@ export class StartapplicationService {
     }
 
     customerEntity.addressLine1 = startapplication.addressLine1;
-    customerEntity.streetAddress += startapplication.streetNumber;
-
-    if (startapplication.streetName) {
-      customerEntity.streetAddress += ',' + startapplication.streetName;
-    }
+    customerEntity.streetNumber = startapplication.streetNumber;
+    customerEntity.streetAddress = startapplication.streetName;
 
     customerEntity.unit = startapplication.unitNumber;
 
@@ -253,6 +250,12 @@ export class StartapplicationService {
   }
 
   async idCardVerificationUpdate(loanId: string, verificationData) {
+    if (
+      undefined === await this.loanRepository.findOne({where: {id: loanId}})
+  ) {
+      throw new NotFoundException('There is no loan with id ' + loanId);
+    }
+
     try {
         const { isVerified } = verificationData;
 
@@ -268,11 +271,11 @@ export class StartapplicationService {
           loanId,
           `Applicant ${isVerified} on ID / Driver’s license verification`,
         );
+
+        return Responses.success('Application updated.')
     } catch (e) {
       throw new InternalServerErrorException(e);
     }
-
-    return Responses.success('Application updated.')
   }
 
   async getMobileOtp(loanId: string) {

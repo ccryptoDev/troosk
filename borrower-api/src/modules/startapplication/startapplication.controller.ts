@@ -122,7 +122,7 @@ export class StartapplicationController {
   // TODO remove on prod
   @Get('/loans/customers/:id_number')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Flush Customer' })
+  @ApiOperation({ summary: 'Get customer by ID number' })
   async getLoanID(@Param('id_number') idCardNumber: string) {
     return this.startapplicationService.getLoanId(idCardNumber);
   }
