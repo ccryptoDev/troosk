@@ -8,7 +8,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { LoanRepository } from '../../repository/loan.repository';
 import { Flags, StatusFlags } from '../../entities/loan.entity';
 import { CustomerRepository } from '../../repository/customer.repository';
-import moment from 'moment';
 import { BankAccountsRepository } from '../../repository/bankAccount.repository';
 import { HttpService } from '@nestjs/axios';
 import { TransactionRepository } from '../../repository/transaction.repository';
@@ -16,6 +15,8 @@ import { method } from '../../entities/transaction.entity';
 import { BalanceStatementRepository } from '../../repository/balance-statement.repository';
 import { BalanceStatement } from '../../entities/balanceStatement.entity';
 import { Responses } from '../../common/responses';
+import { LogRepository } from '../../repository/log.repository';
+import * as moment from 'moment';
 
 @Injectable()
 export class ApprovedService {
@@ -29,13 +30,14 @@ export class ApprovedService {
     private transactionRepository: TransactionRepository,
     @InjectRepository(BalanceStatementRepository)
     private balanceStatementRepository: BalanceStatementRepository,
+    @InjectRepository(LogRepository) private logRepository: LogRepository,
     private httpService: HttpService,
   ) {}
 
   async get() {
     const entityManager = getManager();
     try {
-      const rawData = await entityManager.query(`select t.id as loan_id, t.user_id as user_id, t.ref_no as loan_ref, t2.email as email, t2.ref_no as user_ref, t2."firstName" as firstName, t2."lastName" as lastName
+      const rawData = await entityManager.query(`select t.id as loan_id, t.user_id as user_id, t.ref_no as loan_ref, t2.email as email, t."createdAt" , t2.ref_no as user_ref, t2."firstName" as firstName, t2."lastName" as lastName
             from tblloan t join tbluser t2 on t2.id = t.user_id where t.delete_flag = 'N' and t.active_flag = 'Y' and t.status_flag = 'approved' order by t."createdAt" desc `);
 
       return { statusCode: 200, data: rawData };
@@ -58,22 +60,26 @@ export class ApprovedService {
           "'",
       );
       if (rawData[0]['count'] > 0) {
-        const data = {};
+        const data = {
+          from_details: [],
+        };
         // data['answers'] = await entityManager.query("select t.answer as answer, t2.question as question from tblanswer t join tblquestion t2 on t2.id= t.question_id where loan_id = '"+id+"'")
         data['from_details'] = await entityManager.query(
           "select t.*, t2.ref_no as user_ref from tblcustomer t join tbluser t2  on t2.id = t.user_id where t.loan_id = '" +
             id +
             "'",
         );
-        if (data['from_details'][0]['isCoApplicant']) {
-          data['CoApplicant'] = await entityManager.query(
-            "select * from tblcoapplication where id = '" +
-              data['from_details'][0]['coapplican_id'] +
-              "'",
-          );
-        } else {
-          data['CoApplicant'] = [];
-        }
+
+        const loan = await this.loanRepository.findOne({
+          where: { id },
+          select: ['annualIncome'],
+        });
+
+        data.from_details[0] = {
+          ...data.from_details[0],
+          annualIncome: loan.annualIncome,
+        };
+
         data['files'] = await entityManager.query(
           "select originalname,filename from tblfiles where link_id = '" +
             id +
@@ -100,12 +106,23 @@ export class ApprovedService {
   }
 
   async getlogs(id) {
-    const entityManager = getManager();
     try {
-      const rawData = await entityManager.query(
-        `select CONCAT ('LOG_',t.id) as id, t.module as module, concat(t2.email,' - ',INITCAP(t2."role"::text)) as user, t."createdAt" as createdAt from tbllog t join tbluser t2 on t2.id = t.user_id  where t.loan_id = '${id}' order by t."createdAt" desc;`,
-      );
-      return { statusCode: HttpStatus.OK, data: rawData };
+      const logs = await this.logRepository.find({
+        where: { loan_id: id },
+        order: { createdAt: 'DESC' },
+      });
+      const customer = await this.customerRepository.findOne({
+        where: { loan_id: id },
+      });
+
+      const data = logs.map(log => ({
+        id: 'LOG_' + log.id,
+        module: log.module,
+        user: customer.email,
+        createdat: moment(log.createdAt).format('MMM DD YYY hh:mm'),
+      }));
+
+      return { statusCode: HttpStatus.OK, data };
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
