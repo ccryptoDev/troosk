@@ -9,6 +9,7 @@ import { TransactionRepository } from '../../repository/transaction.repository';
 import { BalanceStatementRepository } from '../../repository/balance-statement.repository';
 import { HttpModule } from '@nestjs/axios';
 import { BankAccountsRepository } from '../../repository/bankAccount.repository';
+import { LogRepository } from '../../repository/log.repository';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { BankAccountsRepository } from '../../repository/bankAccount.repository'
       TransactionRepository,
       BankAccountsRepository,
       BalanceStatementRepository,
+      LogRepository,
     ]),
     HttpModule,
   ],
