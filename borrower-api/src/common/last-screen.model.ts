@@ -8,5 +8,6 @@ export enum LastScreenModel {
   LoanDisbursement = 'LoanDisbursement',
   LoanPayment = 'LoanPayment',
   LoanContract = 'LoanContract',
+  Sign = 'Sign',
   IDVerification = 'IDVerification'
 }
