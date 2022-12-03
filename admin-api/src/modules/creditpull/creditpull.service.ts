@@ -27,16 +27,17 @@ export class CreditpullService {
   async getFiles(id) {
     try {
       const creditPull = await this.creditPullRepository.findOne({
-        where: { loan_id: id },
+        where: { loan_id: id, vendor: 'T', last_response: 'softPull' },
         select: ['file'],
       });
-      return { statusCode: HttpStatus.OK, data: creditPull.file };
+
+      let data = null;
+      if (creditPull)
+        data = JSON.stringify(JSON.parse(creditPull.file), null, ' ');
+
+      return { statusCode: HttpStatus.OK, data };
     } catch (error) {
-      return {
-        statusCode: 500,
-        message: [new InternalServerErrorException(error)['response']['name']],
-        error: 'Bad Request',
-      };
+      throw new InternalServerErrorException(error);
     }
   }
 }
