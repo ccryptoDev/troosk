@@ -6,7 +6,7 @@ export class DeniedService {
   async get() {
     const entityManager = getManager();
     try {
-      const rawData = await entityManager.query(`select t.id as loan_id, t.user_id as user_id, t.ref_no as loan_ref, t2.email as email, t2.ref_no as user_ref, t2."firstName" as firstName, t2."lastName" as lastName
+      const rawData = await entityManager.query(`select t.id as loan_id, t.user_id as user_id, t.ref_no as loan_ref, t2.email as email, t."createdAt" , t2.ref_no as user_ref, t2."firstName" as firstName, t2."lastName" as lastName
             from tblloan t join tbluser t2 on t2.id = t.user_id where t.delete_flag = 'N' and t.active_flag = 'Y' and t.status_flag = 'cancelled' order by t."createdAt" desc `);
       //console.log(rawData)
       return { statusCode: 200, data: rawData };
