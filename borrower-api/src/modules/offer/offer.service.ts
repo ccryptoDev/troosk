@@ -5,6 +5,7 @@ import { Responses } from '../../common/responses';
 import { LoanRepository } from '../../repository/loan.repository';
 import { LastScreenModel } from '../../common/last-screen.model';
 import { UserBankAccountRepository } from '../../repository/user-bank-account.repository';
+import * as moment from 'moment/moment';
 
 export enum Status {
   Approved = 'Approved',
@@ -90,7 +91,9 @@ export class OfferService {
       });
       if (!bankAccounts) return { message: 'Bank Accounts not found' };
 
-      const frequencyDescription = `Monthly, on the ${loan.dayOfMonth} day of each month`;
+      const frequencyDescription = `Monthly, on the ${moment(
+        loan.createdAt,
+      ).format('Do')} day of each month`;
 
       return {
         payment_frequency: frequencyDescription,
