@@ -1,7 +1,6 @@
 export const getLoanAgreement = (
   { customerInfo, bankDetails, loanDetails, amortizationSchedule },
   loanId,
-  endDate,
 ) => {
   const part1 = `
 <h1 style='margin-top:0cm;margin-right:0cm;margin-bottom:6.0pt;margin-left:0cm;text-align:center;font-size:16px;font-family:"Times New Roman",serif;'><strong><span style='font-size:13px;font-family:"Arial Bold",serif;color:black;'>CREDIT AVAILABILITY DISCLOSURE AND ACCOUNT AGREEMENT</span></strong></h1>
@@ -27,7 +26,7 @@ export const getLoanAgreement = (
                   customerInfo.address
                 }</span></strong></p>
                 <p style='margin-top:0cm;margin-right:0cm;margin-bottom:6.0pt;margin-left:0cm;text-align:left;font-size:16px;font-family:"Times New Roman",serif;'><strong><span style='font-size:12px;font-family:"Arial Bold",serif;color:black;'>Phone: ${
-                  customerInfo.phone
+                  customerInfo.mobilePhone
                 }</span></strong></p>
                 <p style='margin-top:0cm;margin-right:0cm;margin-bottom:6.0pt;margin-left:0cm;text-align:left;font-size:16px;font-family:"Times New Roman",serif;'><strong><span style='font-size:12px;font-family:"Arial Bold",serif;color:black;'>&nbsp;</span></strong></p>
             </td>
@@ -118,9 +117,11 @@ export const getLoanAgreement = (
                                 }</span></p>
                             </td>
                             <td style="width: 34.671%; border-top: none; border-left: none; border-bottom: 1pt solid windowtext; border-right: 1pt solid windowtext; padding: 0cm 5.4pt; height: 22.45pt; vertical-align: top;">
-                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:6.0pt;margin-left:0cm;text-align:justify;font-size:16px;font-family:"Times New Roman",serif;'><span style='font-size:13px;font-family:"Arial",sans-serif;'>${
-                                  loanDetails.paymentDueDate.dayOfMonth
-                                }<sup>th</sup> of every month, through ${endDate}</span></p>
+                                <p style='margin-top:0cm;margin-right:0cm;margin-bottom:6.0pt;margin-left:0cm;text-align:justify;font-size:16px;font-family:"Times New Roman",serif;'>
+                                  <span style='font-size:13px;font-family:"Arial",sans-serif;'>
+                                    ${loanDetails.paymentDueDateText}
+                                  </span>
+                                </p>
                             </td>
                         </tr>
                         <tr>
@@ -155,7 +156,9 @@ export const getLoanAgreement = (
     loanDetails.amountFinanced
   } &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;Amount given to You on your ${
     bankDetails.bankName
-  } Account ${bankDetails.accountNumber}</span></p>
+  } ${
+    bankDetails.accountType
+  } Account (ending in ${bankDetails.accountNumber.slice(-4)})</span></p>
 <p style='margin:0cm;margin-bottom:.0001pt;font-size:13px;font-family:"Arial",sans-serif;'><span style="font-size:13px;">&nbsp;</span></p>
 <p style='margin:0cm;margin-bottom:.0001pt;font-size:13px;font-family:"Arial",sans-serif;'><span style="font-size:13px;">&nbsp;</span></p>
 <p style='margin-top:0cm;margin-right:0cm;margin-bottom:6.0pt;margin-left:0cm;text-align:center;font-size:16px;font-family:"Times New Roman",serif;'><strong><span style='font-size:13px;font-family:"Arial",sans-serif;color:black;'>Account Agreement</span></strong></p>
