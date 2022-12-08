@@ -36,9 +36,7 @@ export class PreBureauService {
 
   getOverdraftsFromFinicityReport(report) {
     const {
-      nsf: {
-        monthlyNSFOccurrences,
-      },
+      nsf: { monthlyNSFOccurrences },
     } = report;
     let overdrafts = 0;
 
@@ -54,20 +52,27 @@ export class PreBureauService {
   async generalReport(loanId: string, customerId: string) {
     const settledOrChargedOffLoansCount = await this.loanRepository
       .createQueryBuilder('loan')
-      .where('loan.customer_id = :customerId AND (loan.status_flag = :status1 OR loan.status_flag = :status2)',
-      { status1: StatusFlags.chargedOff, status2: StatusFlags.settled, customerId })
+      .where(
+        'loan.customer_id = :customerId AND (loan.status_flag = :status1 OR loan.status_flag = :status2)',
+        {
+          status1: StatusFlags.chargedOff,
+          status2: StatusFlags.settled,
+          customerId,
+        },
+      )
       .getCount();
 
     const lastDeclinedLoan = await this.loanRepository
       .createQueryBuilder('loan')
       .where(
         'loan.id != :loanId AND loan.customer_id = :customerId AND loan.status_flag = :status',
-      { loanId, customerId, status: StatusFlags.denied })
+        { loanId, customerId, status: StatusFlags.cancelled },
+      )
       .orderBy('loan.createdAt', 'DESC')
       .getOne();
 
     const pastDueLoan = await this.loanRepository.findOne({
-      where: { status_flag: StatusFlags.pastDue, customer_id: customerId},
+      where: { status_flag: StatusFlags.pastDue, customer_id: customerId },
       order: {
         createdAt: 'DESC',
       },
@@ -94,11 +99,13 @@ export class PreBureauService {
       }
     }
 
-    const lastPastDue = pastDueLoan ? moment(pastDueLoan.createdAt).diff(moment(), 'M')
-      : rule2Default
+    const lastPastDue = pastDueLoan
+      ? moment(pastDueLoan.createdAt).diff(moment(), 'M')
+      : rule2Default;
 
-    const lastDeclinedLoanDays = lastDeclinedLoan ?
-      moment(lastDeclinedLoan.updatedAt).diff(moment(), 'days') : deniedLastInDays
+    const lastDeclinedLoanDays = lastDeclinedLoan
+      ? moment(lastDeclinedLoan.updatedAt).diff(moment(), 'days')
+      : deniedLastInDays;
 
     return {
       settledOrChargedOffLoansCount,
