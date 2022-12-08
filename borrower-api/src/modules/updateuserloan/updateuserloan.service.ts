@@ -13,11 +13,11 @@ import { LastScreenModel } from '../../common/last-screen.model';
 import { UserBankAccountsEntity } from '../../entities/user-bank-accounts.entity';
 import { LogService } from '../../common/log.service';
 import { UserBankAccountRepository } from '../../repository/user-bank-account.repository';
-import { RepayClient } from './repay-client';
 import { SecCode } from './dto/retrieve.paytoken';
 import { ACHDetailsDto } from './dto/a-c-h-details.dto';
 import { FinicityClient } from '../finicity/finicity.client';
 import { FinicityIdDto } from './dto/finicity-id.dto';
+import { RepayClient } from '../../common/repay-client';
 
 @Injectable()
 export class UpdateuserloanService {
@@ -158,7 +158,7 @@ export class UpdateuserloanService {
     });
 
     const bankCredentials = await this.finicityClient.getBankAccountDetails(
-      customer.finicity_id,
+      customer?.finicity_id,
       account.account_id,
     );
 
@@ -171,13 +171,23 @@ export class UpdateuserloanService {
       ach_account_type: account.ach_account_type,
       name_on_check: customer.fullName,
       sec_code: SecCode.customer,
+      address_zip: customer.zipCode,
+      email: customer.email
     };
 
-    const repayResponse = await repay.addACHAccount(details as ACHDetailsDto);
+    let repayResponse;
+    try {
+      repayResponse = await repay.addACHAccount(details as ACHDetailsDto);
+    } catch (e) {
+      this.logService.errorLogs(loanId, e.message, JSON.stringify(e));
+    }
 
-    account.repay_token = repayResponse.data?.saved_payment_method.token;
+    if (repayResponse?.data?.saved_payment_method?.token){
+      account.repay_token = repayResponse.data?.saved_payment_method?.token;
+      account.save();
+    }
 
-    return await account.save();
+    return account;
   }
 
   async editPaymentAccountId(
