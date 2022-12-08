@@ -5,7 +5,7 @@
   <!-- <div class="container-fluid"> -->
   <div class="row pb12">
     <div class="col-md-4">
-      <div class="media" (click)="goapproved()">
+      <div class="media" [routerLink]="['/admin/loan-stages/approved']">
         <img class="mr-3" src="../../../assets/new/dash_approved.svg">
         <div class="media-body">
           <h5 class="mt-0">Approved Applications</h5>
@@ -25,7 +25,7 @@
 <!--      </div>-->
 <!--    </div>-->
     <div class="col-md-4">
-      <div class="media" (click)="goincomplete()">
+      <div class="media" [routerLink]="['/admin/loan-stages/waiting']">
         <!-- <div class="fs20px mr30px">Incomplete Applications</div>
         <div class="noCircle">{{ data.incomplete_application }}</div> -->
         <img class="mr-3" src="../../../assets/new/dash_incomplete.svg">
@@ -38,7 +38,7 @@
   </div>
   <div class="row">
     <div class="col-md-4">
-      <div class="media" (click)="godenied()">
+      <div class="media" [routerLink]="['/admin/denied']">
         <!-- <div class="fs20px mr30px">Denied Applications</div>
         <div class="noCircle">{{ data.canceled_application }}</div> -->
         <img class="mr-3" src="../../../assets/new/dash_denied.svg">
