@@ -7,8 +7,9 @@ import { CreditPullRepository } from '../../../repository/creditPull.repository'
 import { Vendors } from '../../../entities/creditPull.entity';
 import { ConfigService } from '@nestjs/config';
 import { LogService } from '../../../common/log.service';
-import { Loan, StatusFlags } from '../../../entities/loan.entity';
+import { Flags, Loan, StatusFlags } from '../../../entities/loan.entity';
 import { TransunionService } from '../transunion/transunion.service';
+import { PV } from '@formulajs/formulajs';
 
 class DecisionResponse {
   approvedRuleMsg: string[];
@@ -85,8 +86,9 @@ export class ProductService {
       {
         status_flag: decision.loanApproved
           ? StatusFlags.approved
-          : StatusFlags.denied,
+          : StatusFlags.cancelled,
         status: decision.declinedRules.join(', '),
+        active_flag: decision.loanApproved ? Flags.Y : Flags.N,
       },
     );
   }
@@ -146,21 +148,23 @@ export class ProductService {
             result.declinedRuleMsg.push(result.ruleData[rule.ruleId].message);
             result.declinedRules.push(rule.ruleId);
           }
-          result.ruleApprovals[rule.ruleId] = result.ruleData[rule.ruleId].passed
+          result.ruleApprovals[rule.ruleId] = result.ruleData[rule.ruleId]
+            .passed
             ? 1
             : 0;
         }
       });
-    } catch (e) {
-
-    }
+    } catch (e) {}
 
     return result;
   }
 
   async stage1Values(loanId: string) {
     const loan = await this.loanRepository.findOne({ where: { id: loanId } });
-    const report = await this.preBureauService.generalReport(loanId, loan.customer_id);
+    const report = await this.preBureauService.generalReport(
+      loanId,
+      loan.customer_id,
+    );
     const {
       settledOrChargedOffLoansCount,
       lastPastDue,
@@ -353,18 +357,20 @@ export class ProductService {
 
   setOfferParams(loan: Loan, tier: number, scoreFICO: number) {
     const monthInYear = 12;
-    const monthMaximumIncomePart = 10;
     const maxAmountModifier = 0.1;
     const percentageCoefficient = 1000;
     const roundCoefficient = 100;
     const jsDecimalHack = 10;
+    const minLoanTerm = 24;
 
     loan.apr = Math.round(tier * percentageCoefficient) / jsDecimalHack;
-    loan.maxLoanAmountFactorA =
-      (loan.annualIncome - loan.annualIncome * tier) /
-      monthInYear /
-      monthMaximumIncomePart /
-      maxAmountModifier;
+    loan.maxLoanAmountFactorA = PV(
+      tier / monthInYear,
+      minLoanTerm,
+      -(maxAmountModifier * loan.annualIncome) / monthInYear,
+      0,
+      0,
+    ) as number;
 
     loan.maxLoanAmountFactorB = this.configService.get('factorB')(scoreFICO);
 
