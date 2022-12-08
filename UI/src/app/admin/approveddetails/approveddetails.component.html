@@ -33,7 +33,7 @@
     <div class="pendingTab">
       <tabset>
         <tab
-          heading="User Information"
+          heading="Customer Information"
           *ngIf="data.from_details.length > 0 && tabs['User Information']"
         >
           <div class="p10px">
@@ -111,7 +111,7 @@
               <ul class="h700">
                 <li>
                   <div class="displayFlex listdetails">
-                    <div class="fontWeight">User Reference</div>
+                    <div class="fontWeight">Customer Reference</div>
                     <div>
                       <a
                         routerLink="/admin/users/{{
@@ -742,7 +742,7 @@
                       <tr>
                         <th style="width: 10px">#</th>
                         <th>Log Reference</th>
-                        <th>Module Name</th>
+                        <th>Event</th>
                         <th>User</th>
                         <th>Created Date</th>
                       </tr>
