@@ -18,7 +18,7 @@ export class DocumentCenterComponent implements OnInit {
   @Input() loanId!: string;
   @ViewChild('messagebox', { read: TemplateRef }) messagebox: TemplateRef<any>;
   modalRef: BsModalRef;
-  message: any = [];
+  message: string;
 
   data = {
     document: []
@@ -48,6 +48,7 @@ export class DocumentCenterComponent implements OnInit {
           this.data.document.push(res['data']);
         },
         err => {
+          console.log(err);
           this.message = err['error']['message'];
           this.modalRef = this.modalService.show(this.messagebox);
         }
