@@ -40,7 +40,7 @@
     <div class="pendingTab" *ngIf="viewApp">
       <tabset>
         <tab
-          heading="User Information"
+          heading="Customer Information"
           *ngIf="data.from_details.length > 0 && tabs['User Information']"
         >
           <div class="p10px">
@@ -255,7 +255,7 @@
               <ul class="h700">
                 <li>
                   <div class="displayFlex listdetails">
-                    <div class="fontWeight">User Reference</div>
+                    <div class="fontWeight">Customer Reference</div>
                     <div>
                       <a
                         routerLink="/admin/users/{{
@@ -653,33 +653,12 @@
           </div>
         </tab>
 
-        <tab
-          heading="Credit Info"
-          *ngIf="data.from_details.length > 0 && tabs['Credit Report']"
-        >
+        <tab heading="Credit Info" *ngIf="data.from_details.length > 0 && tabs['Credit Report']">
           <div class="p10px">
             <div class="frameshadow mb20px">
-              <div>
-                <div class="mainTitle">
-                  Credit Report
-                  <button
-                    class="btn btn-primary"
-                    type="button"
-                    (click)="creditReportPull()"
-                  >
-                    Pull Credit
-                  </button>
-                </div>
-              </div>
-              <div class="p10px">
+              <div class="p10px" >
                 <div *ngIf="creditReportData">
-                  <embed
-                    id="embed"
-                    [src]="safeResourceUrl(creditReportData.file)"
-                    type="application/pdf"
-                    width="100%"
-                    style="height: 800px;"
-                  />
+                  <pre id="embed" style="height: 800px; width: 100%">{{ creditReportData.file }}</pre>
                 </div>
               </div>
             </div>
@@ -691,192 +670,125 @@
           *ngIf="data.from_details.length > 0 && tabs['Payment Schedule']"
         >
           <div class="p10px">
-            <accordion>
-              <accordion-group
-                heading="Change Payment Schedules"
-                (isOpenChange)="paymentAccordinChange($event)"
-              >
-                <div class="payment">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <select
-                        class="form-control"
-                        name="paymentfrequency"
-                        [formControl]="paymentfrequency"
-                        (change)="payamentSchedules.changePaymentfrequency()"
-                      >
-                        <option
-                          [disabled]="
-                            !payamentSchedules.calendarOptions.selectable
-                          "
-                          value="B"
-                          >Bi-Weekly</option
-                        >
-                        <option
-                          [disabled]="
-                            !payamentSchedules.calendarOptions.selectable
-                          "
-                          value="M"
-                          >Monthly</option
-                        >
-                        <option
-                          [disabled]="
-                            !payamentSchedules.calendarOptions.selectable
-                          "
-                          value="S"
-                          >Semi-Monthly</option
-                        >
-                        <option
-                          [disabled]="
-                            !payamentSchedules.calendarOptions.selectable
-                          "
-                          value="W"
-                          >Weekly</option
-                        >
-                      </select>
-                    </div>
-                    <div class="col-md-6">
-                      <button
-                        type="button"
-                        [disabled]="
-                          !payamentSchedules.calendarOptions.selectable
-                        "
-                        (click)="saveReschedules()"
-                        class="btn btn-info"
-                      >
-                        Save
-                      </button>
-                    </div>
-                  </div>
+            <h2>Payment Details</h2>
+            <div class="displayFlex">
+              <div class="frameshadow w35per mr30px">
+                <div>
+                  <div class="mainTitle">Payment</div>
+                  <div class="list2">
+                    <ul>
+                      <li>
+                        <div class="displayFlex listdetails">
+                          <div class="fontWeight">Financing Start Date</div>
+                          <div>{{ payment[0].createdAt }}</div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="displayFlex listdetails">
+                          <div class="fontWeight">Financing Amount</div>
+                          <div>
+                            {{ payment[0].loan_advance | currency }}
+                          </div>
+                        </div>
+                      </li>
 
-                  <full-calendar
-                    #calendar
-                    id="calendar"
-                    [options]="payamentSchedules.calendarOptions"
-                  ></full-calendar>
+                      <li>
+                        <div class="displayFlex listdetails">
+                          <div class="fontWeight">Payoff Amount</div>
+                          <div>
+                            {{ payment[0].payOffAmount | currency }}
+                          </div>
+                        </div>
+                      </li>
+
+                      <li>
+                        <div class="displayFlex listdetails">
+                          <div class="fontWeight">Interest Rate</div>
+                          <div>{{ payment[0].apr }}%</div>
+                        </div>
+                      </li>
+
+                      <li>
+                        <div class="displayFlex listdetails">
+                          <div class="fontWeight">Financing Term</div>
+                          <div>12</div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="displayFlex listdetails">
+                          <div class="fontWeight">Financing Status</div>
+                          <div>{{ payment[0].loantermcount }}</div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="displayFlex listdetails">
+                          <div class="fontWeight">Maturity Date</div>
+                          <div>{{ payment[0].maturityDate }}</div>
+                        </div>
+                      </li>
+                      <li>
+                        <div class="displayFlex listdetails">
+                          <div class="fontWeight">
+                            Next Payment Schedule Date
+                          </div>
+                          <div>{{ payment[0].nextPaymentSchedule }}</div>
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
                 </div>
-              </accordion-group>
-              <accordion-group heading="Payment Details">
-                <div class="displayFlex">
-                  <div class="frameshadow w35per mr30px">
-                    <div>
-                      <div class="mainTitle">Payment</div>
-                      <div class="list2">
-                        <ul>
-                          <li>
-                            <div class="displayFlex listdetails">
-                              <div class="fontWeight">Financing Start Date</div>
-                              <div>{{ payment[0].createdAt }}</div>
-                            </div>
-                          </li>
-                          <li>
-                            <div class="displayFlex listdetails">
-                              <div class="fontWeight">Financing Amount</div>
-                              <div>
-                                {{ payment[0].loan_advance | currency }}
-                              </div>
-                            </div>
-                          </li>
+              </div>
+              <div class="frameshadow w65per">
+                <div class="mainTitle">Payment Schedule Information</div>
 
-                          <li>
-                            <div class="displayFlex listdetails">
-                              <div class="fontWeight">Payoff Amount</div>
-                              <div>
-                                {{ payment[0].payOffAmount | currency }}
-                              </div>
-                            </div>
-                          </li>
-
-                          <li>
-                            <div class="displayFlex listdetails">
-                              <div class="fontWeight">Interest Rate</div>
-                              <div>{{ payment[0].apr }}%</div>
-                            </div>
-                          </li>
-
-                          <li>
-                            <div class="displayFlex listdetails">
-                              <div class="fontWeight">Financing Term</div>
-                              <div>12</div>
-                            </div>
-                          </li>
-                          <li>
-                            <div class="displayFlex listdetails">
-                              <div class="fontWeight">Financing Status</div>
-                              <div>{{ payment[0].loantermcount }}</div>
-                            </div>
-                          </li>
-                          <li>
-                            <div class="displayFlex listdetails">
-                              <div class="fontWeight">Maturity Date</div>
-                              <div>{{ payment[0].maturityDate }}</div>
-                            </div>
-                          </li>
-                          <li>
-                            <div class="displayFlex listdetails">
-                              <div class="fontWeight">
-                                Next Payment Schedule Date
-                              </div>
-                              <div>{{ payment[0].nextPaymentSchedule }}</div>
-                            </div>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="frameshadow w65per">
-                    <div class="mainTitle">Payment Schedule Information</div>
-
-                    <div>
-                      <table class="table">
-                        <thead>
-                          <tr>
-                            <th style="width: 10px">#</th>
-                            <th>Unpaid Principal Balance</th>
-                            <th>Principal</th>
-                            <th>Interest</th>
-                            <th>Fees</th>
-                            <th>Amount</th>
-                            <th>Schedule Date</th>
-                            <th>Paid Date</th>
-                          </tr>
-                        </thead>
-                        <tbody *ngIf="data.paymentScheduleDetails.length > 1">
-                          <tr
-                            *ngFor="
+                <div>
+                  <table class="table">
+                    <thead>
+                    <tr>
+                      <th style="width: 10px">#</th>
+                      <th>Unpaid Principal Balance</th>
+                      <th>Principal</th>
+                      <th>Interest</th>
+                      <th>Fees</th>
+                      <th>Amount</th>
+                      <th>Schedule Date</th>
+                      <th>Paid Date</th>
+                    </tr>
+                    </thead>
+                    <tbody *ngIf="data.paymentScheduleDetails.length > 1">
+                    <tr
+                      *ngFor="
                               let d of data.paymentScheduleDetails;
                               let i = index
                             "
-                          >
-                            <td>{{ i + 1 }}</td>
-                            <td>
-                              {{ d.unpaidPrincipal | currency }}
-                            </td>
-                            <td>
-                              {{ d.principal | currency }}
-                            </td>
-                            <td>{{ d.interest | currency }}</td>
-                            <td>{{ d.fees | currency }}</td>
-                            <td>{{ d.amount | currency }}</td>
-                            <td>
-                              {{
-                                datePipe.transform(d.scheduleDate, "yyyy/MM/dd")
-                              }}
-                            </td>
-                            <td *ngIf="d.paidAt">
-                              {{ datePipe.transform(d.paidAt, "yyyy/MM/dd") }}
-                            </td>
-                            <td *ngIf="!d.paidAt" class="text-center">
-                              -
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
+                    >
+                      <td>{{ i + 1 }}</td>
+                      <td>
+                        {{ d.unpaidPrincipal | currency }}
+                      </td>
+                      <td>
+                        {{ d.principal | currency }}
+                      </td>
+                      <td>{{ d.interest | currency }}</td>
+                      <td>{{ d.fees | currency }}</td>
+                      <td>{{ d.amount | currency }}</td>
+                      <td>
+                        {{
+                        datePipe.transform(d.scheduleDate, "yyyy/MM/dd")
+                        }}
+                      </td>
+                      <td *ngIf="d.paidAt">
+                        {{ datePipe.transform(d.paidAt, "yyyy/MM/dd") }}
+                      </td>
+                      <td *ngIf="!d.paidAt" class="text-center">
+                        -
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
                 </div>
-              </accordion-group>
-            </accordion>
+              </div>
+            </div>
           </div>
         </tab>
 
@@ -1143,7 +1055,7 @@
                       <tr>
                         <th style="width: 10px">#</th>
                         <th>Log Reference</th>
-                        <th>Module Name</th>
+                        <th>Event</th>
                         <th>User</th>
                         <th>Created Date</th>
                       </tr>
