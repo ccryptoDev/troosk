@@ -848,7 +848,7 @@ export class LoanStagesDetailsComponent implements OnInit {
           if (res['statusCode'] === 200) {
             // console.log(res['data']);
             this.creditReportData = {
-              file: 'data:application/pdf;base64,' + res['data']
+              file: res['data']
             };
             // console.log(this.creditReportData);
           }
